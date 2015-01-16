@@ -2,6 +2,10 @@ package us.ichun.mods.guilttrip.common.core;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -15,8 +19,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.lwjgl.opengl.GL11;
 import us.ichun.mods.guilttrip.common.GuiltTrip;
 import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
+import us.ichun.mods.ichunutil.common.core.util.EventCalendar;
 
 import java.util.Random;
 
@@ -98,6 +104,22 @@ public class KillInfo
                         e.printStackTrace();
                     }
                 }
+                if(EventCalendar.isAFDay())
+                {
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Pig",  Minecraft.getMinecraft().theWorld);
+                }
+                else if(EventCalendar.isChristmas())
+                {
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("SnowMan",  Minecraft.getMinecraft().theWorld);
+                }
+                else if(EventCalendar.isHalloween())
+                {
+                    entInstance = Minecraft.getMinecraft().theWorld.rand.nextFloat() < 0.5F ? (EntityLivingBase)EntityList.createEntityByName("Enderman",  Minecraft.getMinecraft().theWorld) : (EntityLivingBase)EntityList.createEntityByName("Blaze",  Minecraft.getMinecraft().theWorld);
+                }
+                if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("direwolf20"))
+                {
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Enderman",  Minecraft.getMinecraft().theWorld);
+                }
                 if(entInstance != null)
                 {
                     entInstance.rotationYawHead = rand.nextFloat() * 360F;
@@ -111,32 +133,69 @@ public class KillInfo
     @SideOnly(Side.CLIENT)
     public void forceRender(double d, double d1, double d2, float f, float f1)
     {
-        if(validateInstance(true))
-        {
-            float bossHealthScale = BossStatus.healthScale;
-            int bossStatusBarTime = BossStatus.statusBarTime;
-            String bossName = BossStatus.bossName;
-            boolean hasColorModifier = BossStatus.hasColorModifier;
+        float bossHealthScale = BossStatus.healthScale;
+        int bossStatusBarTime = BossStatus.statusBarTime;
+        String bossName = BossStatus.bossName;
+        boolean hasColorModifier = BossStatus.hasColorModifier;
 
-            if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().livingPlayer != null)
+        if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().livingPlayer != null)
+        {
+            try
             {
-                try
+                Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).doRender(entInstance, d, d1, d2, entInstance.rotationYawHead, entInstance.rotationPitch);
+
+                if(entInstance.hasCustomName())
                 {
-                    Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).doRender(entInstance, d, d1, d2, entInstance.rotationYawHead, entInstance.rotationPitch);
-                }
-                catch(Exception e)
-                {
-                    GuiltTrip.console("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob", true);
-                    e.printStackTrace();
-                    invalid = true;
+                    String str = entInstance.getCustomNameTag();
+
+                    FontRenderer fontrenderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).getFontRendererFromRenderManager();
+                    float f11 = 0.016666668F * 1.6F;
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(0.0F, entInstance.height + 0.5F, 0.0F);
+                    GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+                    GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+                    GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+                    GlStateManager.scale(-f11, -f11, f11);
+                    GlStateManager.disableLighting();
+                    GlStateManager.depthMask(false);
+                    GlStateManager.disableDepth();
+                    GlStateManager.enableBlend();
+                    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+                    Tessellator tessellator = Tessellator.getInstance();
+                    WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+                    byte b0 = 0;
+                    GlStateManager.disableTexture2D();
+                    worldrenderer.startDrawingQuads();
+                    int j = fontrenderer.getStringWidth(str) / 2;
+                    worldrenderer.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+                    worldrenderer.addVertex((double)(-j - 1), (double)(-1 + b0), 0.0D);
+                    worldrenderer.addVertex((double)(-j - 1), (double)(8 + b0), 0.0D);
+                    worldrenderer.addVertex((double)(j + 1), (double)(8 + b0), 0.0D);
+                    worldrenderer.addVertex((double)(j + 1), (double)(-1 + b0), 0.0D);
+                    tessellator.draw();
+                    GlStateManager.enableTexture2D();
+                    fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, b0, 553648127);
+                    GlStateManager.enableDepth();
+                    GlStateManager.depthMask(true);
+                    fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, b0, -1);
+                    GlStateManager.enableLighting();
+                    GlStateManager.disableBlend();
+                    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                    GlStateManager.popMatrix();
                 }
             }
-
-            BossStatus.healthScale = bossHealthScale;
-            BossStatus.statusBarTime = bossStatusBarTime;
-            BossStatus.bossName = bossName;
-            BossStatus.hasColorModifier = hasColorModifier;
+            catch(Exception e)
+            {
+                GuiltTrip.console("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob", true);
+                e.printStackTrace();
+                invalid = true;
+            }
         }
+
+        BossStatus.healthScale = bossHealthScale;
+        BossStatus.statusBarTime = bossStatusBarTime;
+        BossStatus.bossName = bossName;
+        BossStatus.hasColorModifier = hasColorModifier;
     }
 
     public void update()
@@ -190,6 +249,11 @@ public class KillInfo
             if (f3 >= 75.0F)
             {
                 f3 = 75.0F;
+            }
+
+            if(rand.nextFloat() < 0.01F)
+            {
+                entInstance.swingItem();
             }
 
             entInstance.renderYawOffset = entInstance.rotationYawHead - f3;

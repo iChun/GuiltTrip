@@ -63,7 +63,20 @@ public class TickHandlerServer
         {
             if(killed instanceof EntityAgeable && !(killed instanceof IMob))
             {
-                info.maxAge *= GuiltTrip.config.getInt("animalGuiltMultiplier");
+                float mag = GuiltTrip.config.getInt("animalGuiltMultiplier");
+                if(killed.hasCustomName())
+                {
+                    mag *= 1.5F;
+                }
+                if(killed.isChild())
+                {
+                    mag *= 1.5F;
+                }
+                info.maxAge = (int)((float)info.maxAge * mag);
+            }
+            if(killed instanceof EntityPlayer && GuiltTrip.config.getInt("playerKillsLasting") == 1)
+            {
+                info.maxAge = 0;
             }
             kills.add(info);
             while(kills.size() > GuiltTrip.config.getInt("maxGhosts"))

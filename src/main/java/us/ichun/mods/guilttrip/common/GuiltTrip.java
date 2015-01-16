@@ -53,6 +53,7 @@ public class GuiltTrip
 
         config.createIntBoolProperty("allKills", true, false, true);
         config.createIntBoolProperty("playerKills", true, false, true);
+        config.createIntBoolProperty("playerKillsLasting", true, false, true);
         config.createIntBoolProperty("animalKills", true, false, true);
         config.createIntBoolProperty("bossKills", true, false, true);
         config.createIntBoolProperty("mobKills", true, false, true);

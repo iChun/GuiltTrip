@@ -46,38 +46,43 @@ public class LayerGuiltTrip implements LayerRenderer
 
             for(KillInfo info : kills)
             {
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-                GlStateManager.pushMatrix();
-
-                float alpha = 0.5F + (0.4F * (float)Math.sin(Math.toRadians(MathHelper.clamp_float(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
-                if(info.maxAge > 0)
+                if(info.validateInstance(true))
                 {
-                    float prog = ((float)info.age + renderTick) / (float)info.maxAge;
-                    alpha *= Math.pow(1.0F - MathHelper.clamp_float(prog, 0.0F, 1.0F), 2);
-                    if(prog > 0.95F)
+                    GlStateManager.enableBlend();
+                    GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+                    GlStateManager.pushMatrix();
+
+                    float alpha = 0.5F + (0.4F * (float)Math.sin(Math.toRadians(MathHelper.clamp_float(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
+                    if(info.maxAge > 0)
                     {
-                        float scale1 = (float)Math.pow((prog - 0.95F) / 0.05F, 2F);
-                        GlStateManager.scale(scale1, scale1, scale1);
+                        float prog = ((float)info.age + renderTick) / (float)info.maxAge;
+                        alpha *= Math.pow(1.0F - MathHelper.clamp_float(prog, 0.0F, 1.0F), 2);
+                        if(prog > 0.8F)
+                        {
+                            float scale1 = (float)Math.pow(1F - ((prog - 0.8F) / 0.2F), 2F);
+                            GlStateManager.scale(scale1, scale1, scale1);
+                        }
                     }
+                    GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+
+                    rand.setSeed(Math.abs(info.identifier.hashCode()));
+
+                    GlStateManager.rotate((0.1F + 0.5F * rand.nextFloat()) * (rand.nextFloat() < 0.5F ? 1F : -1F) * ((float)info.age + renderTick), 0.0F, 1.0F, 0.0F);
+
+                    float distY = 0.75F / scale * (float)Math.pow(rand.nextFloat(), 2) + (0.2F * (float)Math.sin(Math.toRadians(MathHelper.clamp_float(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
+                    float dist = 0.75F / scale * (1.0F - distY / (0.5F / scale));
+                    float mag = (float)Math.pow(rand.nextFloat(), 2);
+                    GlStateManager.translate(dist * mag * (rand.nextFloat() < 0.5F ? 1F : -1F), distY, dist * (1.0F - mag) * (rand.nextFloat() < 0.5F ? 1F : -1F));
+
+                    info.entInstance.setPosition(player.posX, player.posY, player.posZ);
+                    info.forceRender(0, 0, 0, 0, 0);
+                    info.entInstance.setPosition(0D, -500D, 0D);
+
+                    GlStateManager.popMatrix();
+
+                    GlStateManager.disableBlend();
                 }
-                GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
-
-                rand.setSeed(Math.abs(info.identifier.hashCode()));
-
-                GlStateManager.rotate((0.1F + 0.5F * rand.nextFloat()) * (rand.nextFloat() < 0.5F ? 1F : -1F) * ((float)info.age + renderTick), 0.0F, 1.0F, 0.0F);
-
-                float distY = 0.75F / scale * (float)Math.pow(rand.nextFloat(), 2) + (0.2F * (float)Math.sin(Math.toRadians(MathHelper.clamp_float(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
-                float dist = 0.75F / scale * (1.0F - distY / (0.5F / scale));
-                float mag = (float)Math.pow(rand.nextFloat(), 2);
-                GlStateManager.translate(dist * mag * (rand.nextFloat() < 0.5F ? 1F : -1F), distY, dist * (1.0F - mag) * (rand.nextFloat() < 0.5F ? 1F : -1F));
-
-                info.forceRender(0, 0, 0, 0, 0);
-
-                GlStateManager.popMatrix();
-
-                GlStateManager.disableBlend();
             }
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 

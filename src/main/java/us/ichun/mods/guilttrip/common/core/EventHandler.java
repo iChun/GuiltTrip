@@ -36,19 +36,19 @@ public class EventHandler
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-//        NBTTagCompound tag = EntityHelperBase.getPlayerPersistentData(event.player, "GuiltTripSave");
-//        int size = tag.getInteger("size");
-//        for(int i = 0; i < size; i++)
-//        {
-//            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerServer.playerKills.get(event.player.getName());
-//            if(kills == null)
-//            {
-//                kills = new ArrayList<KillInfo>();
-//                GuiltTrip.proxy.tickHandlerServer.playerKills.put(event.player.getName(), kills);
-//            }
-//
-//            kills.add(KillInfo.createKillInfoFromTag(tag.getCompoundTag("kill_" + i)));
-//        }
+        NBTTagCompound tag = EntityHelperBase.getPlayerPersistentData(event.player, "GuiltTripSave");
+        int size = tag.getInteger("size");
+        for(int i = 0; i < size; i++)
+        {
+            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerServer.playerKills.get(event.player.getName());
+            if(kills == null)
+            {
+                kills = new ArrayList<KillInfo>();
+                GuiltTrip.proxy.tickHandlerServer.playerKills.put(event.player.getName(), kills);
+            }
+
+            kills.add(KillInfo.createKillInfoFromTag(tag.getCompoundTag("kill_" + i)));
+        }
         GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(event.player.getName(), null);
         GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(null, event.player.getName());
     }
