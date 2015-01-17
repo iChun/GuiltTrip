@@ -17,6 +17,11 @@ public class TickHandlerClient
     {
         if(event.phase == TickEvent.Phase.END)
         {
+            if(Minecraft.getMinecraft().theWorld == null)
+            {
+                playerKills.clear();
+            }
+
             for(ArrayList<KillInfo> kills : playerKills.values())
             {
                 for(int i = kills.size() - 1; i >= 0; i--)

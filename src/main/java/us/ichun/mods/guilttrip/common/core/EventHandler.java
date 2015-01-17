@@ -58,11 +58,4 @@ public class EventHandler
     {
         GuiltTrip.proxy.tickHandlerServer.playerKills.remove(event.player.getName());
     }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
-    {
-        GuiltTrip.proxy.tickHandlerClient.playerKills.clear();
-    }
 }

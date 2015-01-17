@@ -17,6 +17,7 @@ import java.util.Random;
 public class LayerGuiltTrip implements LayerRenderer
 {
     public Random rand = new Random();
+    public int depth = 0;
 
     //func_177093_a(entity, limb stuff, limb stuff, partialTicks, f5, yaw stuff, pitch stuff, 0.0625F);
     public void doRenderLayer(EntityPlayer player, float f, float f1, float renderTick, float f2, float f3, float f4, float f5)
@@ -30,8 +31,9 @@ public class LayerGuiltTrip implements LayerRenderer
             }
         }
         //DO RENDERING HERE.
-        if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(player.getName()))
+        if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(player.getName()) && !player.isInvisible() && depth < 2)
         {
+            depth++;
             ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerClient.playerKills.get(player.getName());
             GlStateManager.pushMatrix();
             GlStateManager.rotate(-EntityHelperBase.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, renderTick), 0.0F, 1.0F, 0.0F);
@@ -87,6 +89,7 @@ public class LayerGuiltTrip implements LayerRenderer
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 
             GlStateManager.popMatrix();
+            depth--;
         }
     }
 

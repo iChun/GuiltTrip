@@ -80,6 +80,7 @@ public class KillInfo
                 if(!playerName.isEmpty())
                 {
                     entInstance = new EntityOtherPlayerMP(Minecraft.getMinecraft().theWorld, EntityHelperBase.getFullGameProfileFromName(playerName));
+                    entInstance.readFromNBT(tag);
                 }
                 else
                 {
@@ -265,24 +266,24 @@ public class KillInfo
 
     public NBTTagCompound getTag()
     {
-        NBTTagCompound tag = new NBTTagCompound();
+        NBTTagCompound tag1 = new NBTTagCompound();
 
-        tag.setString("identifier", identifier);
-        tag.setString("playerName", playerName);
-        tag.setTag("tag", this.tag);
-        tag.setInteger("age", age);
-        tag.setInteger("maxAge", maxAge);
+        tag1.setString("identifier", identifier);
+        tag1.setString("playerName", playerName);
+        tag1.setTag("entTag", tag);
+        tag1.setInteger("age", age);
+        tag1.setInteger("maxAge", maxAge);
 
-        return tag;
+        return tag1;
     }
 
-    public void readTag(NBTTagCompound tag)
+    public void readTag(NBTTagCompound tag1)
     {
-        identifier = tag.getString("identifier");
-        playerName = tag.getString("playerName");
-        this.tag = tag.getCompoundTag("tag");
-        age = tag.getInteger("age");
-        maxAge = tag.getInteger("maxAge");
+        identifier = tag1.getString("identifier");
+        playerName = tag1.getString("playerName");
+        tag = tag1.getCompoundTag("entTag");
+        age = tag1.getInteger("age");
+        maxAge = tag1.getInteger("maxAge");
     }
 
     public static KillInfo createKillInfoFromEntity(EntityLivingBase living)
@@ -293,7 +294,14 @@ public class KillInfo
             KillInfo info = new KillInfo();
             if(living instanceof EntityPlayer)
             {
+                NBTTagCompound persistent = EntityHelperBase.getPlayerPersistentData((EntityPlayer)living);
+                NBTTagCompound tempTag = persistent.getCompoundTag("GuiltTripSave");
+                persistent.setTag("GuiltTripSave", new NBTTagCompound());
+
                 living.writeToNBT(tag);
+                tag = (NBTTagCompound)tag.copy();
+
+                persistent.setTag("GuiltTripSave", tempTag);
                 info.playerName = living.getName();
             }
             tag.setShort("HurtTime", (short)0);

@@ -51,18 +51,22 @@ public class PacketKills extends AbstractPacket
     {
         if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(killer))
         {
+            ArrayList<KillInfo> ori = new ArrayList<KillInfo>();
             ArrayList<KillInfo> zKills = GuiltTrip.proxy.tickHandlerClient.playerKills.get(killer);
-            for(KillInfo info : zKills)
+            for(int j = 0; j < zKills.size(); j++)
             {
+                KillInfo info = zKills.get(j);
                 for(int i = kills.size() - 1; i >= 0; i--)
                 {
                     if(kills.get(i).identifier.equals(info.identifier))
                     {
+                        ori.add(info);
                         kills.remove(i);
                     }
                 }
             }
-            zKills.addAll(kills);
+            ori.addAll(kills);
+            GuiltTrip.proxy.tickHandlerClient.playerKills.put(killer, ori);
         }
         else
         {
