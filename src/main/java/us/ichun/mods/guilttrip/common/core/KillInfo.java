@@ -121,7 +121,7 @@ public class KillInfo
                 {
                     entInstance = (EntityLivingBase)EntityList.createEntityByName("Enderman",  Minecraft.getMinecraft().theWorld);
                 }
-                if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("lomeli12"))
+                else if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("lomeli12"))
                 {
                     entInstance = (EntityLivingBase)EntityList.createEntityByName("Chicken",  Minecraft.getMinecraft().theWorld);
                 }
