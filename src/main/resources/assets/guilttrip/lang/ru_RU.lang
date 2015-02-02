@@ -1,0 +1,23 @@
+guilttrip.config.prop.maxGhosts.name=Максимальное кол-во призраков
+guilttrip.config.prop.maxGhostAge.name=Максимальный возраст призраков
+guilttrip.config.prop.animalGuiltMultiplier.name=Множитель вины
+guilttrip.config.prop.allKills.name=Призраки для всех убийств
+guilttrip.config.prop.playerKills.name=Призраки для убийств игроков
+guilttrip.config.prop.playerKillsLasting.name=Призраки игроков не пропадают
+guilttrip.config.prop.animalKills.name=Призраки для убийств животных
+guilttrip.config.prop.bossKills.name=Призраки для убийств боссов
+guilttrip.config.prop.mobKills.name=Призраки для убийств мобов
+guilttrip.config.prop.ghostWalkAnim.name=Анимации передвижения призраков
+guilttrip.config.prop.ghostLookAnim.name=Анимации осмотра призраков
+
+guilttrip.config.prop.maxGhosts.comment=Максимальное кол-во допустимых призраков мобов для формирования головы игрока
+guilttrip.config.prop.maxGhostAge.comment=Максимальное кол-во тактов до испарения призрака.\nУстановите на 0 для бесконечной жизни призраков.
+guilttrip.config.prop.animalGuiltMultiplier.comment=Сколько животных Вы должны убить, чтобы почувствовать вину?\nЭто значение умножается с максимальным возрастом призраков
+guilttrip.config.prop.allKills.comment=Превращать всех убитых в призраков?
+guilttrip.config.prop.playerKills.comment=Если призраки для всех откл., превращать убитых игроков в призраков? (Вы убийца)
+guilttrip.config.prop.playerKillsLasting.comment=Призраки игроков не должны пропадать? (До замены призраками других игроков)
+guilttrip.config.prop.animalKills.comment=Если призраки для всех откл., превращать убитых животных в призраков?
+guilttrip.config.prop.bossKills.comment=Если призраки для всех откл., превращать убитых боссов в призраков?
+guilttrip.config.prop.mobKills.comment=Если призраки для всех откл., превращать убитых мобов в призраков?\nЭта настройка отделена от убийств животных.
+guilttrip.config.prop.ghostWalkAnim.comment=Включить анимацию передвижения для призраков?
+guilttrip.config.prop.ghostLookAnim.comment=Включить анимацию осмотра для призраков?
