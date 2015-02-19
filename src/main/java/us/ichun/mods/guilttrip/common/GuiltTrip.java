@@ -10,9 +10,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import us.ichun.mods.guilttrip.common.core.CommonProxy;
-import us.ichun.mods.ichunutil.common.core.config.Config;
+import us.ichun.mods.guilttrip.common.core.Config;
 import us.ichun.mods.ichunutil.common.core.config.ConfigHandler;
-import us.ichun.mods.ichunutil.common.core.config.IConfigUser;
 import us.ichun.mods.ichunutil.common.core.network.PacketChannel;
 import us.ichun.mods.ichunutil.common.core.updateChecker.ModVersionChecker;
 import us.ichun.mods.ichunutil.common.core.updateChecker.ModVersionInfo;
@@ -23,7 +22,6 @@ import us.ichun.mods.ichunutil.common.iChunUtil;
         dependencies = "required-after:iChunUtil@["+ iChunUtil.versionMC + ".0.0,)"
             )
 public class GuiltTrip
-        implements IConfigUser
 {
     public static final String version = iChunUtil.versionMC + ".0.0";
 
@@ -39,28 +37,10 @@ public class GuiltTrip
 
     public static PacketChannel channel;
 
-    @Override
-    public boolean onConfigChange(Config cfg, Property prop) { return true; }
-
     @Mod.EventHandler
     public void preLoad(FMLPreInitializationEvent event)
     {
-        config = ConfigHandler.createConfig(event.getSuggestedConfigurationFile(), "guilttrip", "GuiltTrip", logger, instance);
-
-        config.createIntProperty("maxGhosts", true, false, 20, 1, Integer.MAX_VALUE);
-        config.createIntProperty("maxGhostAge", true, false, 24000, 0, Integer.MAX_VALUE);
-        config.createIntProperty("animalGuiltMultiplier", true, false, 1, 1, Integer.MAX_VALUE);
-
-        config.createIntBoolProperty("allKills", true, false, true);
-        config.createIntBoolProperty("playerKills", true, false, true);
-        config.createIntBoolProperty("playerKillsLasting", true, false, true);
-        config.createIntBoolProperty("animalKills", true, false, true);
-        config.createIntBoolProperty("bossKills", true, false, true);
-        config.createIntBoolProperty("mobKills", true, false, true);
-
-        config.setCurrentCategory("clientOnly", "ichun.config.cat.clientOnly.name", "ichun.config.cat.clientOnly.comment");
-        config.createIntBoolProperty("ghostWalkAnim", true, false, true);
-        config.createIntBoolProperty("ghostLookAnim", true, false, true);
+        config = (Config)ConfigHandler.registerConfig(new Config(event.getSuggestedConfigurationFile()));
 
         proxy.preInit();
 
@@ -81,7 +61,6 @@ public class GuiltTrip
 
     public static void console(String s, boolean warning)
     {
-        StringBuilder sb = new StringBuilder();
-        logger.log(warning ? Level.WARN : Level.INFO, sb.append("[").append(version).append("] ").append(s).toString());
+        logger.log(warning ? Level.WARN : Level.INFO, (new StringBuilder()).append("[").append(version).append("] ").append(s).toString());
     }
 }

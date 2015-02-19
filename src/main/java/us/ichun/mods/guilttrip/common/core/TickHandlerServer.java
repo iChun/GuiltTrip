@@ -45,9 +45,9 @@ public class TickHandlerServer
 
     public boolean addPlayerKill(EntityPlayer player, EntityLivingBase killed)//returns true if the kill was added
     {
-        if(GuiltTrip.config.getInt("allKills") != 1)
+        if(GuiltTrip.config.allKills != 1)
         {
-            if(killed instanceof EntityPlayer && GuiltTrip.config.getInt("playerKills") != 1 || killed instanceof EntityAgeable && !(killed instanceof IMob) && GuiltTrip.config.getInt("animalKills") != 1 || killed instanceof IBossDisplayData && GuiltTrip.config.getInt("bossKills") != 1 || killed instanceof EntityCreature && !(killed instanceof EntityAgeable && !(killed instanceof IMob)) && GuiltTrip.config.getInt("mobKills") != 1)
+            if(killed instanceof EntityPlayer && GuiltTrip.config.playerKills != 1 || killed instanceof EntityAgeable && !(killed instanceof IMob) && GuiltTrip.config.animalKills != 1 || killed instanceof IBossDisplayData && GuiltTrip.config.bossKills != 1 || killed instanceof EntityCreature && !(killed instanceof EntityAgeable && !(killed instanceof IMob)) && GuiltTrip.config.mobKills != 1)
             {
                 return false;
             }
@@ -63,7 +63,7 @@ public class TickHandlerServer
         {
             if(killed instanceof EntityAgeable && !(killed instanceof IMob))
             {
-                float mag = GuiltTrip.config.getInt("animalGuiltMultiplier");
+                float mag = GuiltTrip.config.animalGuiltMultiplier;
                 if(killed.hasCustomName())
                 {
                     mag *= 1.5F;
@@ -74,12 +74,12 @@ public class TickHandlerServer
                 }
                 info.maxAge = (int)((float)info.maxAge * mag);
             }
-            if(killed instanceof EntityPlayer && GuiltTrip.config.getInt("playerKillsLasting") == 1)
+            if(killed instanceof EntityPlayer && GuiltTrip.config.playerKillsLasting == 1)
             {
                 info.maxAge = 0;
             }
             kills.add(info);
-            while(kills.size() > GuiltTrip.config.getInt("maxGhosts"))
+            while(kills.size() > GuiltTrip.config.maxGhosts)
             {
                 kills.remove(0);
             }

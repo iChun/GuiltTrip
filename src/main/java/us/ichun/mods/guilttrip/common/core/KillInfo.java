@@ -56,7 +56,7 @@ public class KillInfo
         rand = new Random();
         walkTimeout = 10;
         lookTimeout = 10;
-        maxAge = GuiltTrip.config.getInt("maxGhostAge");
+        maxAge = GuiltTrip.config.maxGhostAge;
     }//use the static method to create the instances.
 
     @SideOnly(Side.CLIENT)
@@ -219,7 +219,7 @@ public class KillInfo
             if(walkTimeout > 0)
             {
                 walkTimeout--;
-                if(walkTimeout == 0 && GuiltTrip.config.getInt("ghostWalkAnim") == 1)
+                if(walkTimeout == 0 && GuiltTrip.config.ghostWalkAnim == 1)
                 {
                     isWalking = !isWalking;
                     walkTimeout = 100 + (int)(isWalking ? 200 * rand.nextFloat() : 100 * rand.nextFloat());
@@ -229,7 +229,7 @@ public class KillInfo
             if(lookTimeout > 0)
             {
                 lookTimeout--;
-                if(lookTimeout == 0 && GuiltTrip.config.getInt("ghostLookAnim") == 1)
+                if(lookTimeout == 0 && GuiltTrip.config.ghostLookAnim == 1)
                 {
                     targetYaw = 360F * rand.nextFloat();
                     targetPitch = 90F * rand.nextFloat() - 45F;
