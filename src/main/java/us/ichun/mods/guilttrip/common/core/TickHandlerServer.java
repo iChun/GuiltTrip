@@ -52,11 +52,11 @@ public class TickHandlerServer
                 return false;
             }
         }
-        ArrayList<KillInfo> kills = playerKills.get(player.getName());
+        ArrayList<KillInfo> kills = playerKills.get(player.getCommandSenderName());
         if(kills == null)
         {
             kills = new ArrayList<KillInfo>();
-            playerKills.put(player.getName(), kills);
+            playerKills.put(player.getCommandSenderName(), kills);
         }
         KillInfo info = KillInfo.createKillInfoFromEntity(killed);
         if(info != null)

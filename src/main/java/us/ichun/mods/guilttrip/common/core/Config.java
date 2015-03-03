@@ -53,6 +53,10 @@ public class Config extends ConfigBase
     @IntBool
     public int ghostLookAnim = 1;
 
+    @ConfigProp(category = "clientOnly")
+    @IntBool
+    public int renderGhosts = 1;
+
     public Config(File file, String... unhide)
     {
         super(file, unhide);

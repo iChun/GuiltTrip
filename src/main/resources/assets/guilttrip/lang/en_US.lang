@@ -9,6 +9,7 @@ guilttrip.config.prop.bossKills.name=Ghost boss kills
 guilttrip.config.prop.mobKills.name=Ghost mob kills
 guilttrip.config.prop.ghostWalkAnim.name=Ghost walking animations
 guilttrip.config.prop.ghostLookAnim.name=Ghost look animations
+guilttrip.config.prop.renderGhosts.name=Render Ghosts
 
 guilttrip.config.prop.maxGhosts.comment=Maximum number of mob ghosts allowed to articulate the player's head
 guilttrip.config.prop.maxGhostAge.comment=Maximum number of ticks a ghost is allowed to live before it disappears.\nSet to 0 for endless living ghosts.
@@ -21,3 +22,4 @@ guilttrip.config.prop.bossKills.comment=If all kills are off, turn boss kills in
 guilttrip.config.prop.mobKills.comment=If all kills are off, turn mob kills into ghosts?\nThis is separate from animal kills.
 guilttrip.config.prop.ghostWalkAnim.comment=Enable the walking animations of ghosts?
 guilttrip.config.prop.ghostLookAnim.comment=Enable the looking animations of ghosts?
+guilttrip.config.prop.renderGhosts.comment=Render the ghosts around the heads of players?

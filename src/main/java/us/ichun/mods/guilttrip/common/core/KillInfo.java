@@ -306,7 +306,7 @@ public class KillInfo
                 tag = (NBTTagCompound)tag.copy();
 
                 persistent.setTag("GuiltTripSave", tempTag);
-                info.playerName = living.getName();
+                info.playerName = living.getCommandSenderName();
             }
             tag.setShort("HurtTime", (short)0);
             tag.setShort("DeathTime", (short)0);

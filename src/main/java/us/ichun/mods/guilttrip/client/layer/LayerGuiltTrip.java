@@ -22,19 +22,23 @@ public class LayerGuiltTrip implements LayerRenderer
     //func_177093_a(entity, limb stuff, limb stuff, partialTicks, f5, yaw stuff, pitch stuff, 0.0625F);
     public void doRenderLayer(EntityPlayer player, float f, float f1, float renderTick, float f2, float f3, float f4, float f5)
     {
+        if(GuiltTrip.config.renderGhosts != 1)
+        {
+            return;
+        }
         if(iChunUtil.hasMorphMod)
         {
-            EntityLivingBase ent = morph.api.Api.getMorphEntity(player.getName(), true);
+            EntityLivingBase ent = morph.api.Api.getMorphEntity(player.getCommandSenderName(), true);
             if(ent != null && !(ent instanceof EntityPlayer))
             {
                 return;
             }
         }
         //DO RENDERING HERE.
-        if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(player.getName()) && !player.isInvisible() && depth < 2)
+        if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(player.getCommandSenderName()) && !player.isInvisible() && depth < 2)
         {
             depth++;
-            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerClient.playerKills.get(player.getName());
+            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerClient.playerKills.get(player.getCommandSenderName());
             GlStateManager.pushMatrix();
             GlStateManager.rotate(-EntityHelperBase.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, renderTick), 0.0F, 1.0F, 0.0F);
             if(player.isSneaking())

@@ -28,7 +28,7 @@ public class EventHandler
 
             if(GuiltTrip.proxy.tickHandlerServer.addPlayerKill(player, living))
             {
-                GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(player.getName(), null);
+                GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(player.getCommandSenderName(), null);
             }
         }
     }
@@ -40,22 +40,22 @@ public class EventHandler
         int size = tag.getInteger("size");
         for(int i = 0; i < size; i++)
         {
-            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerServer.playerKills.get(event.player.getName());
+            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerServer.playerKills.get(event.player.getCommandSenderName());
             if(kills == null)
             {
                 kills = new ArrayList<KillInfo>();
-                GuiltTrip.proxy.tickHandlerServer.playerKills.put(event.player.getName(), kills);
+                GuiltTrip.proxy.tickHandlerServer.playerKills.put(event.player.getCommandSenderName(), kills);
             }
 
             kills.add(KillInfo.createKillInfoFromTag(tag.getCompoundTag("kill_" + i)));
         }
-        GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(event.player.getName(), null);
-        GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(null, event.player.getName());
+        GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(event.player.getCommandSenderName(), null);
+        GuiltTrip.proxy.tickHandlerServer.updatePlayersOnKill(null, event.player.getCommandSenderName());
     }
 
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        GuiltTrip.proxy.tickHandlerServer.playerKills.remove(event.player.getName());
+        GuiltTrip.proxy.tickHandlerServer.playerKills.remove(event.player.getCommandSenderName());
     }
 }
