@@ -9,6 +9,7 @@ guilttrip.config.prop.bossKills.name=Boss-Mob-Tode anzeigen
 guilttrip.config.prop.mobKills.name=Mob-Tode anzeigen
 guilttrip.config.prop.ghostWalkAnim.name=Laufanimation aktivieren
 guilttrip.config.prop.ghostLookAnim.name=Herumschauen aktivieren
+guilttrip.config.prop.renderGhosts.name=Geister rendern
 
 guilttrip.config.prop.maxGhosts.comment=Maximale Anzahl an Geistern, die gleichzeitig um den Spielerkopf kreisen dürfen
 guilttrip.config.prop.maxGhostAge.comment=Maximale Anzahl an Ticks, welche ein Geist leben darf, bevor er verschwindet.\nSetzte auf 0 für unendlich lebende Geister.
@@ -21,3 +22,4 @@ guilttrip.config.prop.bossKills.comment=Wenn alle Tode deaktiviert sind, Boss-Mo
 guilttrip.config.prop.mobKills.comment=Wenn alle Tode deaktiviert sind, getötete Monster in Geister verwandeln?\nDies ist getrennt von Tier-Toden.
 guilttrip.config.prop.ghostWalkAnim.comment=Die Laufanimation der Geister aktivieren?
 guilttrip.config.prop.ghostLookAnim.comment=Die Herumschau-Animation der Geister aktivieren?
+guilttrip.config.prop.renderGhosts.comment=Die Geister um den Köpfen der Spieler rendern?
