@@ -95,13 +95,13 @@ public class KillInfo
                     catch(NullPointerException e)
                     {
                         invalid = true;
-                        GuiltTrip.console("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!", true);
+                        GuiltTrip.logger.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
                         e.printStackTrace();
                     }
                     catch(Exception e)
                     {
                         invalid = true;
-                        GuiltTrip.console("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!", true);
+                        GuiltTrip.logger.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
                         e.printStackTrace();
                     }
                 }
@@ -191,7 +191,7 @@ public class KillInfo
             }
             catch(Exception e)
             {
-                GuiltTrip.console("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob", true);
+                GuiltTrip.logger.warn("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob");
                 e.printStackTrace();
                 invalid = true;
             }

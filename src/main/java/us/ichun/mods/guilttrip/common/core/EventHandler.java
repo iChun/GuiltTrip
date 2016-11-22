@@ -1,5 +1,7 @@
 package us.ichun.mods.guilttrip.common.core;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,16 +9,26 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.ichun.mods.guilttrip.client.layer.LayerGuiltTrip;
 import us.ichun.mods.guilttrip.common.GuiltTrip;
 import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
+import us.ichun.mods.ichunutil.common.core.event.RendererSafeCompatibilityEvent;
 
 import java.util.ArrayList;
 
 public class EventHandler
 {
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onRendererSafeCompatibility(RendererSafeCompatibilityEvent event)
+    {
+        LayerGuiltTrip layer = new LayerGuiltTrip();
+        ((RenderPlayer)Minecraft.getMinecraft().getRenderManager().skinMap.get("default")).addLayer(layer);
+        ((RenderPlayer)Minecraft.getMinecraft().getRenderManager().skinMap.get("slim")).addLayer(layer);
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLivingDeath(LivingDeathEvent event)
     {

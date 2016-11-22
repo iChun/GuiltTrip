@@ -5,11 +5,13 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
 import us.ichun.mods.guilttrip.common.GuiltTrip;
 import us.ichun.mods.guilttrip.common.core.KillInfo;
 import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
 import us.ichun.mods.ichunutil.common.iChunUtil;
+import me.ichun.mods.morph.api.MorphApi;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,17 +24,9 @@ public class LayerGuiltTrip implements LayerRenderer
     //func_177093_a(entity, limb stuff, limb stuff, partialTicks, f5, yaw stuff, pitch stuff, 0.0625F);
     public void doRenderLayer(EntityPlayer player, float f, float f1, float renderTick, float f2, float f3, float f4, float f5)
     {
-        if(GuiltTrip.config.renderGhosts != 1)
+        if(GuiltTrip.config.renderGhosts != 1 || iChunUtil.hasMorphMod && MorphApi.getApiImpl().hasMorph(player.getCommandSenderName(), Side.CLIENT) && !(MorphApi.getApiImpl().getMorphEntity(player.worldObj, player.getCommandSenderName(), Side.CLIENT) instanceof EntityPlayer))
         {
             return;
-        }
-        if(iChunUtil.hasMorphMod)
-        {
-            EntityLivingBase ent = morph.api.Api.getMorphEntity(player.getCommandSenderName(), true);
-            if(ent != null && !(ent instanceof EntityPlayer))
-            {
-                return;
-            }
         }
         //DO RENDERING HERE.
         if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(player.getCommandSenderName()) && !player.isInvisible() && depth < 2)

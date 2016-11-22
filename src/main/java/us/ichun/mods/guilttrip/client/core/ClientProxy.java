@@ -16,14 +16,4 @@ public class ClientProxy extends CommonProxy
         tickHandlerClient = new TickHandlerClient();
         FMLCommonHandler.instance().bus().register(tickHandlerClient);
     }
-
-    @Override
-    public void init()
-    {
-        super.init();
-
-        LayerGuiltTrip layer = new LayerGuiltTrip();
-        ((RenderPlayer)Minecraft.getMinecraft().getRenderManager().skinMap.get("default")).addLayer(layer);
-        ((RenderPlayer)Minecraft.getMinecraft().getRenderManager().skinMap.get("slim")).addLayer(layer);
-    }
 }
