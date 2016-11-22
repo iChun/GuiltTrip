@@ -1,22 +1,21 @@
-package us.ichun.mods.guilttrip.client.layer;
+package me.ichun.mods.guilttrip.client.layer;
 
+import me.ichun.mods.guilttrip.common.GuiltTrip;
+import me.ichun.mods.guilttrip.common.core.KillInfo;
+import me.ichun.mods.ichunutil.common.core.util.EntityHelper;
+import me.ichun.mods.ichunutil.common.iChunUtil;
+import me.ichun.mods.morph.api.MorphApi;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
-import us.ichun.mods.guilttrip.common.GuiltTrip;
-import us.ichun.mods.guilttrip.common.core.KillInfo;
-import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
-import us.ichun.mods.ichunutil.common.iChunUtil;
-import me.ichun.mods.morph.api.MorphApi;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class LayerGuiltTrip implements LayerRenderer
+public class LayerGuiltTrip implements LayerRenderer<EntityPlayer>
 {
     public Random rand = new Random();
     public int depth = 0;
@@ -24,17 +23,17 @@ public class LayerGuiltTrip implements LayerRenderer
     //func_177093_a(entity, limb stuff, limb stuff, partialTicks, f5, yaw stuff, pitch stuff, 0.0625F);
     public void doRenderLayer(EntityPlayer player, float f, float f1, float renderTick, float f2, float f3, float f4, float f5)
     {
-        if(GuiltTrip.config.renderGhosts != 1 || iChunUtil.hasMorphMod && MorphApi.getApiImpl().hasMorph(player.getCommandSenderName(), Side.CLIENT) && !(MorphApi.getApiImpl().getMorphEntity(player.worldObj, player.getCommandSenderName(), Side.CLIENT) instanceof EntityPlayer))
+        if(GuiltTrip.config.renderGhosts != 1 || iChunUtil.hasMorphMod() && MorphApi.getApiImpl().hasMorph(player.getName(), Side.CLIENT) && !(MorphApi.getApiImpl().getMorphEntity(player.worldObj, player.getName(), Side.CLIENT) instanceof EntityPlayer))
         {
             return;
         }
         //DO RENDERING HERE.
-        if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(player.getCommandSenderName()) && !player.isInvisible() && depth < 2)
+        if(GuiltTrip.eventHandlerClient.playerKills.containsKey(player.getName()) && !player.isInvisible() && depth < 2)
         {
             depth++;
-            ArrayList<KillInfo> kills = GuiltTrip.proxy.tickHandlerClient.playerKills.get(player.getCommandSenderName());
+            ArrayList<KillInfo> kills = GuiltTrip.eventHandlerClient.playerKills.get(player.getName());
             GlStateManager.pushMatrix();
-            GlStateManager.rotate(-EntityHelperBase.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, renderTick), 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(-EntityHelper.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, renderTick), 0.0F, 1.0F, 0.0F);
             if(player.isSneaking())
             {
                 GlStateManager.translate(0.0F, 0.25F, 0.0F);
@@ -94,10 +93,5 @@ public class LayerGuiltTrip implements LayerRenderer
     public boolean shouldCombineTextures()
     {
         return false;
-    }
-
-    public void doRenderLayer(EntityLivingBase p_177141_1_, float p_177141_2_, float p_177141_3_, float p_177141_4_, float p_177141_5_, float p_177141_6_, float p_177141_7_, float p_177141_8_)
-    {
-        this.doRenderLayer((EntityPlayer)p_177141_1_, p_177141_2_, p_177141_3_, p_177141_4_, p_177141_5_, p_177141_6_, p_177141_7_, p_177141_8_);
     }
 }

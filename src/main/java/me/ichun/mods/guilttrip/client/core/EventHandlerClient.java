@@ -1,16 +1,20 @@
-package us.ichun.mods.guilttrip.client.core;
+package me.ichun.mods.guilttrip.client.core;
 
+import me.ichun.mods.guilttrip.client.layer.LayerGuiltTrip;
+import me.ichun.mods.guilttrip.common.core.KillInfo;
+import me.ichun.mods.ichunutil.client.core.event.RendererSafeCompatibilityEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import us.ichun.mods.guilttrip.common.core.KillInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class TickHandlerClient
+public class EventHandlerClient
 {
-    public HashMap<String, ArrayList<KillInfo>> playerKills = new HashMap<String, ArrayList<KillInfo>>();
+    public HashMap<String, ArrayList<KillInfo>> playerKills = new HashMap<>();
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event)
@@ -41,6 +45,16 @@ public class TickHandlerClient
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRendererSafeCompatibility(RendererSafeCompatibilityEvent event)
+    {
+        LayerGuiltTrip layer = new LayerGuiltTrip();
+        for(Map.Entry<String, RenderPlayer> e : Minecraft.getMinecraft().getRenderManager().skinMap.entrySet())
+        {
+            e.getValue().addLayer(layer);
         }
     }
 }

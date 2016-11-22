@@ -1,12 +1,12 @@
-package us.ichun.mods.guilttrip.common.packet;
+package me.ichun.mods.guilttrip.common.packet;
 
 import io.netty.buffer.ByteBuf;
+import me.ichun.mods.guilttrip.common.core.KillInfo;
+import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
-import us.ichun.mods.guilttrip.common.GuiltTrip;
-import us.ichun.mods.guilttrip.common.core.KillInfo;
-import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
+import me.ichun.mods.guilttrip.common.GuiltTrip;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class PacketKills extends AbstractPacket
     }
 
     @Override
-    public void writeTo(ByteBuf buffer, Side side)
+    public void writeTo(ByteBuf buffer)
     {
         ByteBufUtils.writeUTF8String(buffer, killer);
         buffer.writeInt(kills.size());
@@ -35,10 +35,10 @@ public class PacketKills extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side)
+    public void readFrom(ByteBuf buffer)
     {
         killer = ByteBufUtils.readUTF8String(buffer);
-        kills = new ArrayList<KillInfo>();
+        kills = new ArrayList<>();
         int size = buffer.readInt();
         for(int i = 0; i < size; i++)
         {
@@ -47,12 +47,12 @@ public class PacketKills extends AbstractPacket
     }
 
     @Override
-    public void execute(Side side, EntityPlayer player)
+    public AbstractPacket execute(Side side, EntityPlayer player)
     {
-        if(GuiltTrip.proxy.tickHandlerClient.playerKills.containsKey(killer))
+        if(GuiltTrip.eventHandlerClient.playerKills.containsKey(killer))
         {
-            ArrayList<KillInfo> ori = new ArrayList<KillInfo>();
-            ArrayList<KillInfo> zKills = GuiltTrip.proxy.tickHandlerClient.playerKills.get(killer);
+            ArrayList<KillInfo> ori = new ArrayList<>();
+            ArrayList<KillInfo> zKills = GuiltTrip.eventHandlerClient.playerKills.get(killer);
             for(int j = 0; j < zKills.size(); j++)
             {
                 KillInfo info = zKills.get(j);
@@ -66,11 +66,18 @@ public class PacketKills extends AbstractPacket
                 }
             }
             ori.addAll(kills);
-            GuiltTrip.proxy.tickHandlerClient.playerKills.put(killer, ori);
+            GuiltTrip.eventHandlerClient.playerKills.put(killer, ori);
         }
         else
         {
-            GuiltTrip.proxy.tickHandlerClient.playerKills.put(killer, kills);
+            GuiltTrip.eventHandlerClient.playerKills.put(killer, kills);
         }
+        return null;
+    }
+
+    @Override
+    public Side receivingSide()
+    {
+        return Side.CLIENT;
     }
 }

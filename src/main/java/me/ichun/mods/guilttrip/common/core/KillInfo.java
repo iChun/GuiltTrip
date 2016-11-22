@@ -1,28 +1,26 @@
-package us.ichun.mods.guilttrip.common.core;
+package me.ichun.mods.guilttrip.common.core;
 
+import me.ichun.mods.ichunutil.common.core.util.EntityHelper;
+import me.ichun.mods.ichunutil.common.core.util.EventCalendar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.lwjgl.opengl.GL11;
-import us.ichun.mods.guilttrip.common.GuiltTrip;
-import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
-import us.ichun.mods.ichunutil.common.core.util.EventCalendar;
+import me.ichun.mods.guilttrip.common.GuiltTrip;
 
 import java.util.Random;
 
@@ -79,7 +77,7 @@ public class KillInfo
             {
                 if(!playerName.isEmpty())
                 {
-                    entInstance = new EntityOtherPlayerMP(Minecraft.getMinecraft().theWorld, EntityHelperBase.getFullGameProfileFromName(playerName));
+                    entInstance = new EntityOtherPlayerMP(Minecraft.getMinecraft().theWorld, EntityHelper.getGameProfile(playerName));
                     entInstance.readFromNBT(tag);
                 }
                 else
@@ -95,13 +93,13 @@ public class KillInfo
                     catch(NullPointerException e)
                     {
                         invalid = true;
-                        GuiltTrip.logger.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
+                        GuiltTrip.LOGGER.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
                         e.printStackTrace();
                     }
                     catch(Exception e)
                     {
                         invalid = true;
-                        GuiltTrip.logger.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
+                        GuiltTrip.LOGGER.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
                         e.printStackTrace();
                     }
                 }
@@ -138,16 +136,16 @@ public class KillInfo
     @SideOnly(Side.CLIENT)
     public void forceRender(double d, double d1, double d2, float f, float f1)
     {
-        float bossHealthScale = BossStatus.healthScale;
-        int bossStatusBarTime = BossStatus.statusBarTime;
-        String bossName = BossStatus.bossName;
-        boolean hasColorModifier = BossStatus.hasColorModifier;
+//        float bossHealthScale = BossStatus.healthScale;
+//        int bossStatusBarTime = BossStatus.statusBarTime;
+//        String bossName = BossStatus.bossName;
+//        boolean hasColorModifier = BossStatus.hasColorModifier;
 
-        if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().livingPlayer != null)
+        if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null)
         {
             try
             {
-                Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).doRender(entInstance, d, d1, d2, entInstance.rotationYawHead, entInstance.rotationPitch);
+                Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).doRender(entInstance, d, d1, d2, entInstance.rotationYawHead, entInstance.rotationPitch); // not the right params but it causes some glitchiness, so it works.
 
                 if(entInstance.hasCustomName())
                 {
@@ -167,16 +165,15 @@ public class KillInfo
                     GlStateManager.enableBlend();
                     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
                     Tessellator tessellator = Tessellator.getInstance();
-                    WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+                    VertexBuffer vertexBuffer = tessellator.getBuffer();
                     byte b0 = 0;
                     GlStateManager.disableTexture2D();
-                    worldrenderer.startDrawingQuads();
                     int j = fontrenderer.getStringWidth(str) / 2;
-                    worldrenderer.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
-                    worldrenderer.addVertex((double)(-j - 1), (double)(-1 + b0), 0.0D);
-                    worldrenderer.addVertex((double)(-j - 1), (double)(8 + b0), 0.0D);
-                    worldrenderer.addVertex((double)(j + 1), (double)(8 + b0), 0.0D);
-                    worldrenderer.addVertex((double)(j + 1), (double)(-1 + b0), 0.0D);
+                    vertexBuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+                    vertexBuffer.pos((double)(-j - 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    vertexBuffer.pos((double)(-j - 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    vertexBuffer.pos((double)(j + 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    vertexBuffer.pos((double)(j + 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
                     fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, b0, 553648127);
@@ -191,16 +188,16 @@ public class KillInfo
             }
             catch(Exception e)
             {
-                GuiltTrip.logger.warn("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob");
+                GuiltTrip.LOGGER.warn("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob");
                 e.printStackTrace();
                 invalid = true;
             }
         }
 
-        BossStatus.healthScale = bossHealthScale;
-        BossStatus.statusBarTime = bossStatusBarTime;
-        BossStatus.bossName = bossName;
-        BossStatus.hasColorModifier = hasColorModifier;
+//        BossStatus.healthScale = bossHealthScale;
+//        BossStatus.statusBarTime = bossStatusBarTime;
+//        BossStatus.bossName = bossName;
+//        BossStatus.hasColorModifier = hasColorModifier;
     }
 
     public void update()
@@ -241,10 +238,10 @@ public class KillInfo
             {
                 entInstance.limbSwingAmount += (1.0F - entInstance.limbSwingAmount) * 0.4F;
             }
-            entInstance.rotationYaw = entInstance.rotationYawHead = EntityHelperBase.updateRotation(entInstance.rotationYawHead, targetYaw, 1.5F);
-            entInstance.rotationPitch = EntityHelperBase.updateRotation(entInstance.rotationPitch, targetPitch, 1F);
+            entInstance.rotationYaw = entInstance.rotationYawHead = EntityHelper.updateRotation(entInstance.rotationYawHead, targetYaw, 1.5F);
+            entInstance.rotationPitch = EntityHelper.updateRotation(entInstance.rotationPitch, targetPitch, 1F);
 
-            float f3 = MathHelper.wrapAngleTo180_float(entInstance.rotationYawHead - entInstance.renderYawOffset);
+            float f3 = MathHelper.wrapDegrees(entInstance.rotationYawHead - entInstance.renderYawOffset);
 
             if (f3 < -75.0F)
             {
@@ -258,7 +255,7 @@ public class KillInfo
 
             if(rand.nextFloat() < 0.01F)
             {
-                entInstance.swingItem();
+                entInstance.swingArm(EnumHand.MAIN_HAND);
             }
 
             entInstance.renderYawOffset = entInstance.rotationYawHead - f3;
@@ -298,15 +295,15 @@ public class KillInfo
             KillInfo info = new KillInfo();
             if(living instanceof EntityPlayer)
             {
-                NBTTagCompound persistent = EntityHelperBase.getPlayerPersistentData((EntityPlayer)living);
+                NBTTagCompound persistent = EntityHelper.getPlayerPersistentData((EntityPlayer)living);
                 NBTTagCompound tempTag = persistent.getCompoundTag("GuiltTripSave");
                 persistent.setTag("GuiltTripSave", new NBTTagCompound());
 
                 living.writeToNBT(tag);
-                tag = (NBTTagCompound)tag.copy();
+                tag = tag.copy();
 
                 persistent.setTag("GuiltTripSave", tempTag);
-                info.playerName = living.getCommandSenderName();
+                info.playerName = living.getName();
             }
             tag.setShort("HurtTime", (short)0);
             tag.setShort("DeathTime", (short)0);
