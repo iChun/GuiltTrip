@@ -2,6 +2,7 @@ package me.ichun.mods.guilttrip.common;
 
 import me.ichun.mods.guilttrip.client.core.EventHandlerClient;
 import me.ichun.mods.guilttrip.common.core.Config;
+import me.ichun.mods.guilttrip.common.core.EventHandlerServer;
 import me.ichun.mods.guilttrip.common.core.ProxyCommon;
 import me.ichun.mods.ichunutil.common.core.Logger;
 import me.ichun.mods.ichunutil.common.core.config.ConfigHandler;
@@ -12,13 +13,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import me.ichun.mods.guilttrip.common.core.EventHandlerServer;
 
 @Mod(modid = GuiltTrip.MOD_ID, name = GuiltTrip.MOD_NAME,
         version = GuiltTrip.VERSION,
         guiFactory = "me.ichun.mods.ichunutil.common.core.config.GenericModGuiFactory",
         dependencies = "required-after:ichunutil@[" + iChunUtil.VERSION_MAJOR + ".0.0," + (iChunUtil.VERSION_MAJOR + 1) + ".0.0)",
-        acceptableRemoteVersions = "[" + iChunUtil.VERSION_MAJOR +".0.0," + iChunUtil.VERSION_MAJOR + ".1.0)"
+        acceptableRemoteVersions = "[" + iChunUtil.VERSION_MAJOR + ".0.0," + iChunUtil.VERSION_MAJOR + ".1.0)"
 )
 public class GuiltTrip
 {

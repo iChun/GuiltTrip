@@ -1,5 +1,6 @@
 package me.ichun.mods.guilttrip.common.core;
 
+import me.ichun.mods.guilttrip.common.GuiltTrip;
 import me.ichun.mods.ichunutil.common.core.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.core.util.EventCalendar;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.lwjgl.opengl.GL11;
-import me.ichun.mods.guilttrip.common.GuiltTrip;
 
 import java.util.Random;
 
@@ -105,23 +105,23 @@ public class KillInfo
                 }
                 if(EventCalendar.isAFDay())
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Pig",  Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Pig", Minecraft.getMinecraft().theWorld);
                 }
                 else if(EventCalendar.isChristmas())
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("SnowMan",  Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("SnowMan", Minecraft.getMinecraft().theWorld);
                 }
                 else if(EventCalendar.isHalloween())
                 {
-                    entInstance = Minecraft.getMinecraft().theWorld.rand.nextFloat() < 0.5F ? (EntityLivingBase)EntityList.createEntityByName("Enderman",  Minecraft.getMinecraft().theWorld) : (EntityLivingBase)EntityList.createEntityByName("Blaze",  Minecraft.getMinecraft().theWorld);
+                    entInstance = Minecraft.getMinecraft().theWorld.rand.nextFloat() < 0.5F ? (EntityLivingBase)EntityList.createEntityByName("Enderman", Minecraft.getMinecraft().theWorld) : (EntityLivingBase)EntityList.createEntityByName("Blaze", Minecraft.getMinecraft().theWorld);
                 }
                 if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("direwolf20"))
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Enderman",  Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Enderman", Minecraft.getMinecraft().theWorld);
                 }
                 else if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("lomeli12"))
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Chicken",  Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Chicken", Minecraft.getMinecraft().theWorld);
                 }
                 if(entInstance != null)
                 {
@@ -136,10 +136,10 @@ public class KillInfo
     @SideOnly(Side.CLIENT)
     public void forceRender(double d, double d1, double d2, float f, float f1)
     {
-//        float bossHealthScale = BossStatus.healthScale;
-//        int bossStatusBarTime = BossStatus.statusBarTime;
-//        String bossName = BossStatus.bossName;
-//        boolean hasColorModifier = BossStatus.hasColorModifier;
+        //        float bossHealthScale = BossStatus.healthScale;
+        //        int bossStatusBarTime = BossStatus.statusBarTime;
+        //        String bossName = BossStatus.bossName;
+        //        boolean hasColorModifier = BossStatus.hasColorModifier;
 
         if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null)
         {
@@ -194,10 +194,10 @@ public class KillInfo
             }
         }
 
-//        BossStatus.healthScale = bossHealthScale;
-//        BossStatus.statusBarTime = bossStatusBarTime;
-//        BossStatus.bossName = bossName;
-//        BossStatus.hasColorModifier = hasColorModifier;
+        //        BossStatus.healthScale = bossHealthScale;
+        //        BossStatus.statusBarTime = bossStatusBarTime;
+        //        BossStatus.bossName = bossName;
+        //        BossStatus.hasColorModifier = hasColorModifier;
     }
 
     public void update()
@@ -243,12 +243,12 @@ public class KillInfo
 
             float f3 = MathHelper.wrapDegrees(entInstance.rotationYawHead - entInstance.renderYawOffset);
 
-            if (f3 < -75.0F)
+            if(f3 < -75.0F)
             {
                 f3 = -75.0F;
             }
 
-            if (f3 >= 75.0F)
+            if(f3 >= 75.0F)
             {
                 f3 = 75.0F;
             }

@@ -1,12 +1,12 @@
 package me.ichun.mods.guilttrip.common.packet;
 
 import io.netty.buffer.ByteBuf;
+import me.ichun.mods.guilttrip.common.GuiltTrip;
 import me.ichun.mods.guilttrip.common.core.KillInfo;
 import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
-import me.ichun.mods.guilttrip.common.GuiltTrip;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class PacketKills extends AbstractPacket
     public String killer;
     public ArrayList<KillInfo> kills;
 
-    public PacketKills(){}
+    public PacketKills() {}
 
     public PacketKills(String name, ArrayList<KillInfo> zKills)
     {

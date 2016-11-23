@@ -141,7 +141,8 @@ public class EventHandlerServer
 
     /**
      * Update clients on a kill
-     * @param name - Which player to reference, null for all
+     *
+     * @param name   - Which player to reference, null for all
      * @param direct - Which player to send to, null for all
      */
     public void updatePlayersOnKill(String name, String direct)

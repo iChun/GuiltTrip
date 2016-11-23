@@ -1,10 +1,10 @@
 package me.ichun.mods.guilttrip.common.core;
 
+import me.ichun.mods.guilttrip.common.GuiltTrip;
 import me.ichun.mods.ichunutil.common.core.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.core.config.annotations.ConfigProp;
 import me.ichun.mods.ichunutil.common.core.config.annotations.IntBool;
 import me.ichun.mods.ichunutil.common.core.config.annotations.IntMinMax;
-import me.ichun.mods.guilttrip.common.GuiltTrip;
 
 import java.io.File;
 
