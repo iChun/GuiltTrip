@@ -48,9 +48,9 @@ public class EventHandlerServer
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLivingDeath(LivingDeathEvent event)
     {
-        if(!event.getEntityLiving().getEntityWorld().isRemote && event.getSource().getEntity() instanceof EntityPlayerMP && event.getEntityLiving() != event.getSource().getEntity()) // player killed something, server side
+        if(!event.getEntityLiving().getEntityWorld().isRemote && event.getSource().getTrueSource() instanceof EntityPlayerMP && event.getEntityLiving() != event.getSource().getTrueSource()) // player killed something, server side
         {
-            EntityPlayerMP player = (EntityPlayerMP)event.getSource().getEntity();
+            EntityPlayerMP player = (EntityPlayerMP)event.getSource().getTrueSource();
 
             EntityLivingBase living = event.getEntityLiving();
 

@@ -6,9 +6,9 @@ import me.ichun.mods.ichunutil.common.core.util.EventCalendar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,7 +63,7 @@ public class KillInfo
     {
         if(entInstance != null)
         {
-            if(entInstance.getEntityWorld() != Minecraft.getMinecraft().theWorld)
+            if(entInstance.getEntityWorld() != Minecraft.getMinecraft().world)
             {
                 return false;
             }
@@ -77,14 +78,14 @@ public class KillInfo
             {
                 if(!playerName.isEmpty())
                 {
-                    entInstance = new EntityOtherPlayerMP(Minecraft.getMinecraft().theWorld, EntityHelper.getGameProfile(playerName));
+                    entInstance = new EntityOtherPlayerMP(Minecraft.getMinecraft().world, EntityHelper.getGameProfile(playerName));
                     entInstance.readFromNBT(tag);
                 }
                 else
                 {
                     try
                     {
-                        entInstance = (EntityLivingBase)EntityList.createEntityFromNBT(tag, Minecraft.getMinecraft().theWorld);
+                        entInstance = (EntityLivingBase)EntityList.createEntityFromNBT(tag, Minecraft.getMinecraft().world);
                         if(entInstance == null)
                         {
                             invalid = true;
@@ -105,23 +106,23 @@ public class KillInfo
                 }
                 if(EventCalendar.isAFDay())
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Pig", Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "pig"), Minecraft.getMinecraft().world);
                 }
                 else if(EventCalendar.isChristmas())
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("SnowMan", Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "snowman"), Minecraft.getMinecraft().world);
                 }
                 else if(EventCalendar.isHalloween())
                 {
-                    entInstance = Minecraft.getMinecraft().theWorld.rand.nextFloat() < 0.5F ? (EntityLivingBase)EntityList.createEntityByName("Enderman", Minecraft.getMinecraft().theWorld) : (EntityLivingBase)EntityList.createEntityByName("Blaze", Minecraft.getMinecraft().theWorld);
+                    entInstance = Minecraft.getMinecraft().world.rand.nextFloat() < 0.5F ? (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "enderman"), Minecraft.getMinecraft().world) : (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "blaze"), Minecraft.getMinecraft().world);
                 }
                 if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("direwolf20"))
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Enderman", Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "enderman"), Minecraft.getMinecraft().world);
                 }
                 else if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("lomeli12"))
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByName("Chicken", Minecraft.getMinecraft().theWorld);
+                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "chicken"), Minecraft.getMinecraft().world);
                 }
                 if(entInstance != null)
                 {
@@ -165,15 +166,15 @@ public class KillInfo
                     GlStateManager.enableBlend();
                     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
                     Tessellator tessellator = Tessellator.getInstance();
-                    VertexBuffer vertexBuffer = tessellator.getBuffer();
+                    BufferBuilder bufferbuilder = tessellator.getBuffer();
                     byte b0 = 0;
                     GlStateManager.disableTexture2D();
                     int j = fontrenderer.getStringWidth(str) / 2;
-                    vertexBuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                    vertexBuffer.pos((double)(-j - 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    vertexBuffer.pos((double)(-j - 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    vertexBuffer.pos((double)(j + 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    vertexBuffer.pos((double)(j + 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+                    bufferbuilder.pos((double)(-j - 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    bufferbuilder.pos((double)(-j - 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    bufferbuilder.pos((double)(j + 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    bufferbuilder.pos((double)(j + 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
                     fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, b0, 553648127);
@@ -193,11 +194,6 @@ public class KillInfo
                 invalid = true;
             }
         }
-
-        //        BossStatus.healthScale = bossHealthScale;
-        //        BossStatus.statusBarTime = bossStatusBarTime;
-        //        BossStatus.bossName = bossName;
-        //        BossStatus.hasColorModifier = hasColorModifier;
     }
 
     public void update()

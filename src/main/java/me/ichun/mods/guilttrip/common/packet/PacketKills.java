@@ -47,7 +47,7 @@ public class PacketKills extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         if(GuiltTrip.eventHandlerClient.playerKills.containsKey(killer))
         {
@@ -72,7 +72,6 @@ public class PacketKills extends AbstractPacket
         {
             GuiltTrip.eventHandlerClient.playerKills.put(killer, kills);
         }
-        return null;
     }
 
     @Override

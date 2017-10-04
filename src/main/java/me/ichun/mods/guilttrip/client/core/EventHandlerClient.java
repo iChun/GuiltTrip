@@ -21,7 +21,7 @@ public class EventHandlerClient
     {
         if(event.phase == TickEvent.Phase.END)
         {
-            if(Minecraft.getMinecraft().theWorld == null)
+            if(Minecraft.getMinecraft().world == null)
             {
                 playerKills.clear();
             }

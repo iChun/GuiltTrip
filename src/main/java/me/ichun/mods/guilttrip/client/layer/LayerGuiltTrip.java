@@ -23,7 +23,7 @@ public class LayerGuiltTrip implements LayerRenderer<EntityPlayer>
     //func_177093_a(entity, limb stuff, limb stuff, partialTicks, f5, yaw stuff, pitch stuff, 0.0625F);
     public void doRenderLayer(EntityPlayer player, float f, float f1, float renderTick, float f2, float f3, float f4, float f5)
     {
-        if(GuiltTrip.config.renderGhosts != 1 || iChunUtil.hasMorphMod() && MorphApi.getApiImpl().hasMorph(player.getName(), Side.CLIENT) && !(MorphApi.getApiImpl().getMorphEntity(player.worldObj, player.getName(), Side.CLIENT) instanceof EntityPlayer))
+        if(GuiltTrip.config.renderGhosts != 1 || iChunUtil.hasMorphMod() && MorphApi.getApiImpl().hasMorph(player.getName(), Side.CLIENT) && !(MorphApi.getApiImpl().getMorphEntity(player.world, player.getName(), Side.CLIENT) instanceof EntityPlayer))
         {
             return;
         }
@@ -52,11 +52,11 @@ public class LayerGuiltTrip implements LayerRenderer<EntityPlayer>
 
                     GlStateManager.pushMatrix();
 
-                    float alpha = 0.5F + (0.4F * (float)Math.sin(Math.toRadians(MathHelper.clamp_float(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
+                    float alpha = 0.5F + (0.4F * (float)Math.sin(Math.toRadians(MathHelper.clamp(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
                     if(info.maxAge > 0)
                     {
                         float prog = ((float)info.age + renderTick) / (float)info.maxAge;
-                        alpha *= Math.pow(1.0F - MathHelper.clamp_float(prog, 0.0F, 1.0F), 2);
+                        alpha *= Math.pow(1.0F - MathHelper.clamp(prog, 0.0F, 1.0F), 2);
                         if(prog > 0.8F)
                         {
                             float scale1 = (float)Math.pow(1F - ((prog - 0.8F) / 0.2F), 2F);
@@ -69,7 +69,7 @@ public class LayerGuiltTrip implements LayerRenderer<EntityPlayer>
 
                     GlStateManager.rotate((0.1F + 0.5F * rand.nextFloat()) * (rand.nextFloat() < 0.5F ? 1F : -1F) * ((float)info.age + renderTick), 0.0F, 1.0F, 0.0F);
 
-                    float distY = 0.75F / scale * (float)Math.pow(rand.nextFloat(), 2) + (0.2F * (float)Math.sin(Math.toRadians(MathHelper.clamp_float(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
+                    float distY = 0.75F / scale * (float)Math.pow(rand.nextFloat(), 2) + (0.2F * (float)Math.sin(Math.toRadians(MathHelper.clamp(((float)(info.age % 200) + renderTick) / 200F, 0.0F, 1.0F) * 180F)));
                     float dist = 0.75F / scale * (1.0F - distY / (0.5F / scale));
                     float mag = (float)Math.pow(rand.nextFloat(), 2);
                     GlStateManager.translate(dist * mag * (rand.nextFloat() < 0.5F ? 1F : -1F), distY, dist * (1.0F - mag) * (rand.nextFloat() < 0.5F ? 1F : -1F));
