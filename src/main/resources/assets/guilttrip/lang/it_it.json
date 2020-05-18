@@ -1,0 +1,23 @@
+{
+  "config.guilttrip.prop.maxGhosts.name": "Massimo numero di mob fantasmi",
+  "config.guilttrip.prop.maxGhostAge.name": "Durata massima dei mob fantasmi",
+  "config.guilttrip.prop.animalGuiltMultiplier.name": "Animal Guilt Multiplier",
+  "config.guilttrip.prop.allKills.name": "Fantasmi di tutti gli uccisi",
+  "config.guilttrip.prop.playerKills.name": "Fantasmi dei giocatori uccisi",
+  "config.guilttrip.prop.animalKills.name": "Fantasmi degli animali uccisi",
+  "config.guilttrip.prop.bossKills.name": "Fantasmi dei bos uccisi",
+  "config.guilttrip.prop.mobKills.name": "Fantasmi dei mob uccisi",
+  "config.guilttrip.prop.ghostWalkAnim.name": "Animazione dei fantasmi: camminata",
+  "config.guilttrip.prop.ghostLookAnim.name": "Animazione dei fantasmi: guardare",
+
+  "config.guilttrip.prop.maxGhosts.desc": "Il numero massimo di fantasmi permessi intorno alla testa di un giocatore",
+  "config.guilttrip.prop.maxGhostAge.desc": "Massimo numero di ticks prima che il fantasma sparisca.\nSetta a 0 per avere i fantasmi sempre presenti.",
+  "config.guilttrip.prop.animalGuiltMultiplier.desc": "Quanto dovresti essere in colpa per i mob?\nQuesto valore è un moltiplicatore per la durata dei fantasmi",
+  "config.guilttrip.prop.allKills.desc": "Trasforma tutti gli i morti in fantasmi?",
+  "config.guilttrip.prop.playerKills.desc": "Se tutte le morti sono disattivate, trasforma i giocatori uccisi in fantasmi?",
+  "config.guilttrip.prop.animalKills.desc": "Se tutte le morti sono disattivate, trasforma gli animali uccisi in fantasmi?",
+  "config.guilttrip.prop.bossKills.desc": "Se tutte le morti sono disattivate, trasforma i boss uccisi in fantasmi?",
+  "config.guilttrip.prop.mobKills.desc": "Se tutte le morti sono disattivate, trasforma i mob uccisi in fantasmi?\nDiversi dagli animali uccisi.",
+  "config.guilttrip.prop.ghostWalkAnim.desc": "I fantasmi camminano?",
+  "config.guilttrip.prop.ghostLookAnim.desc": "I fantasmi guardano in giro?"
+}

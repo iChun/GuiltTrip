@@ -1,0 +1,25 @@
+{
+  "config.guilttrip.prop.maxGhosts.name": "Максимальное кол-во призраков",
+  "config.guilttrip.prop.maxGhostAge.name": "Максимальный возраст призраков",
+  "config.guilttrip.prop.animalGuiltMultiplier.name": "Множитель вины",
+  "config.guilttrip.prop.allKills.name": "Призраки для всех убийств",
+  "config.guilttrip.prop.playerKills.name": "Призраки для убийств игроков",
+  "config.guilttrip.prop.playerKillsLasting.name": "Призраки игроков не пропадают",
+  "config.guilttrip.prop.animalKills.name": "Призраки для убийств животных",
+  "config.guilttrip.prop.bossKills.name": "Призраки для убийств боссов",
+  "config.guilttrip.prop.mobKills.name": "Призраки для убийств мобов",
+  "config.guilttrip.prop.ghostWalkAnim.name": "Анимации передвижения призраков",
+  "config.guilttrip.prop.ghostLookAnim.name": "Анимации осмотра призраков",
+
+  "config.guilttrip.prop.maxGhosts.desc": "Максимальное кол-во допустимых призраков мобов для формирования головы игрока",
+  "config.guilttrip.prop.maxGhostAge.desc": "Максимальное кол-во тактов до испарения призрака.\nУстановите на 0 для бесконечной жизни призраков.",
+  "config.guilttrip.prop.animalGuiltMultiplier.desc": "Сколько животных Вы должны убить, чтобы почувствовать вину?\nЭто значение умножается с максимальным возрастом призраков",
+  "config.guilttrip.prop.allKills.desc": "Превращать всех убитых в призраков?",
+  "config.guilttrip.prop.playerKills.desc": "Если призраки для всех откл., превращать убитых игроков в призраков? (Вы убийца)",
+  "config.guilttrip.prop.playerKillsLasting.desc": "Призраки игроков не должны пропадать? (До замены призраками других игроков)",
+  "config.guilttrip.prop.animalKills.desc": "Если призраки для всех откл., превращать убитых животных в призраков?",
+  "config.guilttrip.prop.bossKills.desc": "Если призраки для всех откл., превращать убитых боссов в призраков?",
+  "config.guilttrip.prop.mobKills.desc": "Если призраки для всех откл., превращать убитых мобов в призраков?\nЭта настройка отделена от убийств животных.",
+  "config.guilttrip.prop.ghostWalkAnim.desc": "Включить анимацию передвижения для призраков?",
+  "config.guilttrip.prop.ghostLookAnim.desc": "Включить анимацию осмотра для призраков?"
+}

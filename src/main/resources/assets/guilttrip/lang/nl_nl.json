@@ -1,0 +1,23 @@
+{
+  "config.guilttrip.prop.maxGhosts.name": "Maximum aantal aan geesten",
+  "config.guilttrip.prop.maxGhostAge.name": "Maximum leeftijd van geesten",
+  "config.guilttrip.prop.animalGuiltMultiplier.name": "Maximum aantal van een soort geest",
+  "config.guilttrip.prop.allKills.name": "Alle doden naar geesten",
+  "config.guilttrip.prop.playerKills.name": "Dode spelers worden geesten",
+  "config.guilttrip.prop.animalKills.name": "Dode dieren worden geesten",
+  "config.guilttrip.prop.bossKills.name": "Bazen worden geesten",
+  "config.guilttrip.prop.mobKills.name": "Dode vijanden worden geesten",
+  "config.guilttrip.prop.ghostWalkAnim.name": "Geesten lopen alsof ze nog leefden",
+  "config.guilttrip.prop.ghostLookAnim.name": "Geesten kijken onschuldig rond",
+
+  "config.guilttrip.prop.maxGhosts.desc": "Het maximum aantal geesten dat is toegestaan om op iemands geweten te staan",
+  "config.guilttrip.prop.maxGhostAge.desc": "De maximale leeftijd van een geest. Plaats op 0 voor geesten die je eeuwig blijven achtervolgen",
+  "config.guilttrip.prop.animalGuiltMultiplier.desc": "Hoeveel keer meer moet een geest je schuldig laten voelen. Deze waarde wordt vermenigvuldigd met de maximum leeftijd",
+  "config.guilttrip.prop.allKills.desc": "Moeten alle doden geesten worden?",
+  "config.guilttrip.prop.playerKills.desc": "Als alle doden af is, moeten alle speler doden geesten worden? (Moordenaar,dat je bent :()",
+  "config.guilttrip.prop.animalKills.desc": "Als alle doden af is, moeten alle dode dieren geesten worden?",
+  "config.guilttrip.prop.bossKills.desc": "Als alle doden af is, moeten alle bazen een geest worden?",
+  "config.guilttrip.prop.mobKills.desc": "Als alle doden af is, moeten alle vijandelijke moorden geesten worden?",
+  "config.guilttrip.prop.ghostWalkAnim.desc": "Schakel de loop animatie in voor geesten.",
+  "config.guilttrip.prop.ghostLookAnim.desc": "Schakel de kijk animatie in voor geesten."
+}

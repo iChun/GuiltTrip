@@ -1,0 +1,27 @@
+{
+  "config.guilttrip.prop.maxGhosts.name": "Maximale Geisteranzahl",
+  "config.guilttrip.prop.maxGhostAge.name": "Maximales Geisteralter",
+  "config.guilttrip.prop.animalGuiltMultiplier.name": "Schuldgefühl-Multiplizierer",
+  "config.guilttrip.prop.allKills.name": "Alle Tode anzeigen",
+  "config.guilttrip.prop.playerKills.name": "Spielertode anzeigen",
+  "config.guilttrip.prop.playerKillsLasting.name": "Geisterspieler leben ewig",
+  "config.guilttrip.prop.animalKills.name": "Tiertode anzeigen",
+  "config.guilttrip.prop.bossKills.name": "Boss-Mob-Tode anzeigen",
+  "config.guilttrip.prop.mobKills.name": "Mob-Tode anzeigen",
+  "config.guilttrip.prop.ghostWalkAnim.name": "Laufanimation aktivieren",
+  "config.guilttrip.prop.ghostLookAnim.name": "Herumschauen aktivieren",
+  "config.guilttrip.prop.renderGhosts.name": "Geister rendern",
+
+  "config.guilttrip.prop.maxGhosts.desc": "Maximale Anzahl an Geistern, die gleichzeitig um den Spielerkopf kreisen dürfen",
+  "config.guilttrip.prop.maxGhostAge.desc": "Maximale Anzahl an Ticks, welche ein Geist leben darf, bevor er verschwindet.\nSetzte auf 0 für unendlich lebende Geister.",
+  "config.guilttrip.prop.animalGuiltMultiplier.desc": "Wie viel mehr dich das Töten eines Tieses schuldig fühlen lässt.\nDiese Angabe wird mit dem maximalen Geisteralter multipliziert.",
+  "config.guilttrip.prop.allKills.desc": "Alle Tode zu Geistern umwandeln?",
+  "config.guilttrip.prop.playerKills.desc": "Wenn alle Tode deaktiviert sind, getötete Spieler in Geister verwandeln? (Du Mörder!)",
+  "config.guilttrip.prop.playerKillsLasting.desc": "Sollen Geisterspieler ewig leben? (Bis sie von den Geistern anderer ersetzt werden)",
+  "config.guilttrip.prop.animalKills.desc": "Wenn alle Tode deaktiviert sind, getötete Tiere in Geister verwandeln?",
+  "config.guilttrip.prop.bossKills.desc": "Wenn alle Tode deaktiviert sind, Boss-Mobs in Geister verwandeln?",
+  "config.guilttrip.prop.mobKills.desc": "Wenn alle Tode deaktiviert sind, getötete Monster in Geister verwandeln?\nDies ist getrennt von Tier-Toden.",
+  "config.guilttrip.prop.ghostWalkAnim.desc": "Die Laufanimation der Geister aktivieren?",
+  "config.guilttrip.prop.ghostLookAnim.desc": "Die Herumschau-Animation der Geister aktivieren?",
+  "config.guilttrip.prop.renderGhosts.desc": "Die Geister um den Köpfen der Spieler rendern?"
+}

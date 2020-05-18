@@ -1,0 +1,27 @@
+{
+  "config.guilttrip.prop.maxGhosts.name": "Maximum mob ghosts",
+  "config.guilttrip.prop.maxGhostAge.name": "Maximum mob ghost age",
+  "config.guilttrip.prop.animalGuiltMultiplier.name": "Animal Guilt Multiplier",
+  "config.guilttrip.prop.allKills.name": "Ghost all kills",
+  "config.guilttrip.prop.playerKills.name": "Ghost player kills",
+  "config.guilttrip.prop.playerKillsLasting.name": "Ghost Player Lasts Forever",
+  "config.guilttrip.prop.animalKills.name": "Ghost animal kills",
+  "config.guilttrip.prop.bossKills.name": "Ghost boss kills",
+  "config.guilttrip.prop.mobKills.name": "Ghost mob kills",
+  "config.guilttrip.prop.ghostWalkAnim.name": "Ghost walking animations",
+  "config.guilttrip.prop.ghostLookAnim.name": "Ghost look animations",
+  "config.guilttrip.prop.renderGhosts.name": "Render Ghosts",
+
+  "config.guilttrip.prop.maxGhosts.desc": "Maximum number of mob ghosts allowed to articulate the player's head",
+  "config.guilttrip.prop.maxGhostAge.desc": "Maximum number of ticks a ghost is allowed to live before it disappears.\nSet to 0 for endless living ghosts.",
+  "config.guilttrip.prop.animalGuiltMultiplier.desc": "How much more should killing an animal make you feel guilty?\nThis value is multiplied with the Max Ghost Age config",
+  "config.guilttrip.prop.allKills.desc": "Turn all kills to ghosts?",
+  "config.guilttrip.prop.playerKills.desc": "If all kills are off, turn player kills into ghosts? (You murderer)",
+  "config.guilttrip.prop.playerKillsLasting.desc": "Do ghost players last forever? (Until replaced by the ghosts of others)",
+  "config.guilttrip.prop.animalKills.desc": "If all kills are off, turn animal kills into ghosts?",
+  "config.guilttrip.prop.bossKills.desc": "If all kills are off, turn boss kills into ghosts?",
+  "config.guilttrip.prop.mobKills.desc": "If all kills are off, turn mob kills into ghosts?\nThis is separate from animal kills.",
+  "config.guilttrip.prop.ghostWalkAnim.desc": "Enable the walking animations of ghosts?",
+  "config.guilttrip.prop.ghostLookAnim.desc": "Enable the looking animations of ghosts?",
+  "config.guilttrip.prop.renderGhosts.desc": "Render the ghosts around the heads of players?"
+}

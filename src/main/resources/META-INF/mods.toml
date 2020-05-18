@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[31,)" #forge version dep
+issueTrackerURL="https://github.com/iChun/GuiltTrip/issues"
+
+[[mods]]
+    modId="guilttrip"
+    version="${file.jarVersion}" #mandatory
+    displayName="Guilt Trip"
+    displayURL="https://ichun.me/mods/guilt-trip/"
+    authors="iChun"
+    description='''
+    Your victims of slaughter will haunt you!
+    '''
+
+[[dependencies.guilttrip]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.guilttrip]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2,1.16)"
+    ordering="NONE"
+    side="BOTH"

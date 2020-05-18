@@ -2,11 +2,11 @@ package me.ichun.mods.guilttrip.client.core;
 
 import me.ichun.mods.guilttrip.client.layer.LayerGuiltTrip;
 import me.ichun.mods.guilttrip.common.core.KillInfo;
-import me.ichun.mods.ichunutil.client.core.event.RendererSafeCompatibilityEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class EventHandlerClient
     {
         if(event.phase == TickEvent.Phase.END)
         {
-            if(Minecraft.getMinecraft().world == null)
+            if(Minecraft.getInstance().world == null)
             {
                 playerKills.clear();
             }
@@ -35,7 +35,7 @@ public class EventHandlerClient
                     {
                         info.entInstance = null; // set to null so GC can collect it.
                     }
-                    else if(!Minecraft.getMinecraft().isGamePaused())
+                    else if(!Minecraft.getInstance().isGamePaused())
                     {
                         info.update();
                         if(info.maxAge != 0 && info.age > info.maxAge + 100)
@@ -49,12 +49,11 @@ public class EventHandlerClient
     }
 
     @SubscribeEvent
-    public void onRendererSafeCompatibility(RendererSafeCompatibilityEvent event)
+    public void addGuiltTripLayer(FMLLoadCompleteEvent event)
     {
-        LayerGuiltTrip layer = new LayerGuiltTrip();
-        for(Map.Entry<String, RenderPlayer> e : Minecraft.getMinecraft().getRenderManager().skinMap.entrySet())
+        for(Map.Entry<String, PlayerRenderer> e : Minecraft.getInstance().getRenderManager().skinMap.entrySet())
         {
-            e.getValue().addLayer(layer);
+            e.getValue().addLayer(new LayerGuiltTrip(e.getValue()));
         }
     }
 }

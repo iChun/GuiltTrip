@@ -1,39 +1,36 @@
 package me.ichun.mods.guilttrip.common.core;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.guilttrip.common.GuiltTrip;
-import me.ichun.mods.ichunutil.common.core.util.EntityHelper;
-import me.ichun.mods.ichunutil.common.core.util.EventCalendar;
+import me.ichun.mods.ichunutil.common.entity.EntityHelper;
+import me.ichun.mods.ichunutil.common.util.EventCalendar;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.entity.player.RemoteClientPlayerEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.lwjgl.opengl.GL11;
 
+import java.util.Optional;
 import java.util.Random;
 
 public class KillInfo
 {
-    public EntityLivingBase entInstance;
+    public LivingEntity entInstance;
 
     public String identifier;
 
     public String playerName;
 
-    public NBTTagCompound tag;
+    public CompoundNBT tag;
 
     public int age;
     public int maxAge;
@@ -51,19 +48,19 @@ public class KillInfo
     {
         identifier = RandomStringUtils.randomAscii(20);
         playerName = "";
-        tag = new NBTTagCompound();
+        tag = new CompoundNBT();
         rand = new Random();
         walkTimeout = 10;
         lookTimeout = 10;
-        maxAge = GuiltTrip.config.maxGhostAge;
+        maxAge = GuiltTrip.configCommon.maxGhostAge;
     }//use the static method to create the instances.
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean validateInstance(boolean recreate)//returns true is entity is null or is okay..
     {
         if(entInstance != null)
         {
-            if(entInstance.getEntityWorld() != Minecraft.getMinecraft().world)
+            if(entInstance.getEntityWorld() != Minecraft.getInstance().world)
             {
                 return false;
             }
@@ -78,26 +75,25 @@ public class KillInfo
             {
                 if(!playerName.isEmpty())
                 {
-                    entInstance = new EntityOtherPlayerMP(Minecraft.getMinecraft().world, EntityHelper.getGameProfile(playerName));
-                    entInstance.readFromNBT(tag);
+                    //RemoteClientPlayerEntity
+                    entInstance = new RemoteClientPlayerEntity(Minecraft.getInstance().world, EntityHelper.getGameProfile(null, playerName));
+                    entInstance.read(tag);
                 }
                 else
                 {
                     try
                     {
-                        entInstance = (EntityLivingBase)EntityList.createEntityFromNBT(tag, Minecraft.getMinecraft().world);
+                        Optional<Entity> entity = EntityType.loadEntityUnchecked(tag, Minecraft.getInstance().world);
+                        if(entity.isPresent() && entity.get() instanceof LivingEntity)
+                        {
+                            entInstance = (LivingEntity)entity.get();
+                        }
                         if(entInstance == null)
                         {
                             invalid = true;
                         }
                     }
-                    catch(NullPointerException e)
-                    {
-                        invalid = true;
-                        GuiltTrip.LOGGER.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
-                        e.printStackTrace();
-                    }
-                    catch(Exception e)
+                    catch(Throwable e)
                     {
                         invalid = true;
                         GuiltTrip.LOGGER.warn("A mob is throwing an error when being read from NBT! You should report this to the mod author of the mob!");
@@ -106,23 +102,23 @@ public class KillInfo
                 }
                 if(EventCalendar.isAFDay())
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "pig"), Minecraft.getMinecraft().world);
+                    entInstance = EntityType.PIG.create(Minecraft.getInstance().world);
                 }
                 else if(EventCalendar.isChristmas())
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "snowman"), Minecraft.getMinecraft().world);
+                    entInstance = EntityType.SNOW_GOLEM.create(Minecraft.getInstance().world);
                 }
                 else if(EventCalendar.isHalloween())
                 {
-                    entInstance = Minecraft.getMinecraft().world.rand.nextFloat() < 0.5F ? (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "enderman"), Minecraft.getMinecraft().world) : (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "blaze"), Minecraft.getMinecraft().world);
+                    entInstance = (Minecraft.getInstance().world.rand.nextFloat() < 0.5F ? EntityType.ENDERMAN : EntityType.BLAZE).create(Minecraft.getInstance().world);
                 }
-                if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("direwolf20"))
+                if(Minecraft.getInstance().getSession().getUsername().equalsIgnoreCase("direwolf20"))
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "enderman"), Minecraft.getMinecraft().world);
+                    entInstance = EntityType.ENDERMAN.create(Minecraft.getInstance().world);
                 }
-                else if(Minecraft.getMinecraft().getSession().getUsername().equalsIgnoreCase("lomeli12"))
+                else if(Minecraft.getInstance().getSession().getUsername().equalsIgnoreCase("lomeli12"))
                 {
-                    entInstance = (EntityLivingBase)EntityList.createEntityByIDFromName(new ResourceLocation("minecraft", "chicken"), Minecraft.getMinecraft().world);
+                    entInstance = EntityType.CHICKEN.create(Minecraft.getInstance().world);
                 }
                 if(entInstance != null)
                 {
@@ -134,60 +130,18 @@ public class KillInfo
         return !invalid;
     }
 
-    @SideOnly(Side.CLIENT)
-    public void forceRender(double d, double d1, double d2, float f, float f1)
+    @OnlyIn(Dist.CLIENT)
+    public void forceRender(float partialTick, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
     {
-        //        float bossHealthScale = BossStatus.healthScale;
-        //        int bossStatusBarTime = BossStatus.statusBarTime;
-        //        String bossName = BossStatus.bossName;
-        //        boolean hasColorModifier = BossStatus.hasColorModifier;
 
-        if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null)
+        if(Minecraft.getInstance().getRenderViewEntity() != null) //in world?
         {
             try
             {
-                Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).doRender(entInstance, d, d1, d2, entInstance.rotationYawHead, entInstance.rotationPitch); // not the right params but it causes some glitchiness, so it works.
-
-                if(entInstance.hasCustomName())
-                {
-                    String str = entInstance.getCustomNameTag();
-
-                    FontRenderer fontrenderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entInstance).getFontRendererFromRenderManager();
-                    float f11 = 0.016666668F * 1.6F;
-                    GlStateManager.pushMatrix();
-                    GlStateManager.translate(0.0F, entInstance.height + 0.5F, 0.0F);
-                    GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-                    GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-                    GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-                    GlStateManager.scale(-f11, -f11, f11);
-                    GlStateManager.disableLighting();
-                    GlStateManager.depthMask(false);
-                    GlStateManager.disableDepth();
-                    GlStateManager.enableBlend();
-                    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-                    Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferbuilder = tessellator.getBuffer();
-                    byte b0 = 0;
-                    GlStateManager.disableTexture2D();
-                    int j = fontrenderer.getStringWidth(str) / 2;
-                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                    bufferbuilder.pos((double)(-j - 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    bufferbuilder.pos((double)(-j - 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    bufferbuilder.pos((double)(j + 1), (double)(8 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    bufferbuilder.pos((double)(j + 1), (double)(-1 + b0), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    tessellator.draw();
-                    GlStateManager.enableTexture2D();
-                    fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, b0, 553648127);
-                    GlStateManager.enableDepth();
-                    GlStateManager.depthMask(true);
-                    fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, b0, -1);
-                    GlStateManager.enableLighting();
-                    GlStateManager.disableBlend();
-                    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                    GlStateManager.popMatrix();
-                }
+                Minecraft.getInstance().getRenderManager().getRenderer(entInstance).render(entInstance, entInstance.rotationYawHead, partialTick, matrixStackIn, bufferIn, packedLightIn); //TODO fix this with alpha
+                //TODO boss mobs??
             }
-            catch(Exception e)
+            catch(Throwable e)
             {
                 GuiltTrip.LOGGER.warn("A mob is causing an exception when GuiltTrip tries to render it! You might want to report this to the author of the mob");
                 e.printStackTrace();
@@ -204,15 +158,15 @@ public class KillInfo
             entInstance.setPosition(0, -500D, 0);
             entInstance.setAir(300);
             entInstance.setHealth(1);
-            if(entInstance instanceof EntityAgeable && entInstance.isChild())
+            if(entInstance instanceof AgeableEntity && entInstance.isChild())
             {
-                EntityAgeable living = (EntityAgeable)entInstance;
+                AgeableEntity living = (AgeableEntity)entInstance;
                 living.setGrowingAge(living.getGrowingAge() - 1);
             }
             if(walkTimeout > 0)
             {
                 walkTimeout--;
-                if(walkTimeout == 0 && GuiltTrip.config.ghostWalkAnim == 1)
+                if(walkTimeout == 0 && GuiltTrip.configClient.ghostWalkAnim)
                 {
                     isWalking = !isWalking;
                     walkTimeout = 100 + (int)(isWalking ? 200 * rand.nextFloat() : 100 * rand.nextFloat());
@@ -222,7 +176,7 @@ public class KillInfo
             if(lookTimeout > 0)
             {
                 lookTimeout--;
-                if(lookTimeout == 0 && GuiltTrip.config.ghostLookAnim == 1)
+                if(lookTimeout == 0 && GuiltTrip.configClient.ghostLookAnim)
                 {
                     targetYaw = 360F * rand.nextFloat();
                     targetPitch = 90F * rand.nextFloat() - 45F;
@@ -251,60 +205,61 @@ public class KillInfo
 
             if(rand.nextFloat() < 0.01F)
             {
-                entInstance.swingArm(EnumHand.MAIN_HAND);
+                entInstance.swingArm(Hand.MAIN_HAND);
             }
 
             entInstance.renderYawOffset = entInstance.rotationYawHead - f3;
 
             entInstance.ticksExisted++;
-            entInstance.onUpdate(); //should i do this or not?
+            entInstance.tick(); //should i do this or not?
         }
     }
 
-    public NBTTagCompound getTag()
+    public CompoundNBT getTag()
     {
-        NBTTagCompound tag1 = new NBTTagCompound();
+        CompoundNBT tag1 = new CompoundNBT();
 
-        tag1.setString("identifier", identifier);
-        tag1.setString("playerName", playerName);
-        tag1.setTag("entTag", tag);
-        tag1.setInteger("age", age);
-        tag1.setInteger("maxAge", maxAge);
+        tag1.putString("identifier", identifier);
+        tag1.putString("playerName", playerName);
+        tag1.put("entTag", tag);
+        tag1.putInt("age", age);
+        tag1.putInt("maxAge", maxAge);
 
         return tag1;
     }
 
-    public void readTag(NBTTagCompound tag1)
+    public void readTag(CompoundNBT tag1)
     {
         identifier = tag1.getString("identifier");
         playerName = tag1.getString("playerName");
-        tag = tag1.getCompoundTag("entTag");
-        age = tag1.getInteger("age");
-        maxAge = tag1.getInteger("maxAge");
+        tag = tag1.getCompound("entTag");
+        age = tag1.getInt("age");
+        maxAge = tag1.getInt("maxAge");
     }
 
-    public static KillInfo createKillInfoFromEntity(EntityLivingBase living)
+    public static KillInfo createKillInfoFromEntity(LivingEntity living)
     {
-        NBTTagCompound tag = new NBTTagCompound();
-        if(living instanceof EntityPlayer || living.writeToNBTOptional(tag))
+        CompoundNBT tag = new CompoundNBT();
+        if(living instanceof PlayerEntity || living.writeUnlessRemoved(tag))
         {
             KillInfo info = new KillInfo();
-            if(living instanceof EntityPlayer)
+            if(living instanceof PlayerEntity)
             {
-                NBTTagCompound persistent = EntityHelper.getPlayerPersistentData((EntityPlayer)living);
-                NBTTagCompound tempTag = persistent.getCompoundTag("GuiltTripSave");
-                persistent.setTag("GuiltTripSave", new NBTTagCompound());
+                CompoundNBT persistent = EntityHelper.getPlayerPersistentData((PlayerEntity)living, null);
+                CompoundNBT tempTag = persistent.getCompound("GuiltTripSave");
+                persistent.remove("GuiltTripSave");
 
-                living.writeToNBT(tag);
+                living.writeWithoutTypeId(tag); //override the persistent tag with new tag.
                 tag = tag.copy();
 
-                persistent.setTag("GuiltTripSave", tempTag);
-                info.playerName = living.getName();
+                persistent.put("GuiltTripSave", tempTag);
+                info.playerName = living.getName().getUnformattedComponentText();
             }
-            tag.setShort("HurtTime", (short)0);
-            tag.setShort("DeathTime", (short)0);
-            tag.setFloat("HealF", 1);
-            tag.setShort("Health", (short)1);
+            tag.putShort("HurtTime", (short)0);
+            tag.putShort("DeathTime", (short)0);
+            tag.putFloat("HealF", 1);
+            tag.putShort("Health", (short)1);
+            tag.putBoolean("CustomNameVisible", true);
 
             info.tag = tag;
             return info;
@@ -312,7 +267,7 @@ public class KillInfo
         return null;
     }
 
-    public static KillInfo createKillInfoFromTag(NBTTagCompound tag)
+    public static KillInfo createKillInfoFromTag(CompoundNBT tag)
     {
         KillInfo info = new KillInfo();
         info.readTag(tag);

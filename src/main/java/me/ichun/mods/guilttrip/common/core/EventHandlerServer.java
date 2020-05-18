@@ -2,20 +2,22 @@ package me.ichun.mods.guilttrip.common.core;
 
 import me.ichun.mods.guilttrip.common.GuiltTrip;
 import me.ichun.mods.guilttrip.common.packet.PacketKills;
-import me.ichun.mods.ichunutil.common.core.util.EntityHelper;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import me.ichun.mods.ichunutil.common.entity.EntityHelper;
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +26,12 @@ import java.util.Map;
 public class EventHandlerServer
 {
     public HashMap<String, ArrayList<KillInfo>> playerKills = new HashMap<>();
+
+    @SubscribeEvent
+    public void onServerShuttingDown(FMLServerStoppingEvent event)
+    {
+        playerKills.clear();
+    }
 
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event)
@@ -48,15 +56,15 @@ public class EventHandlerServer
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLivingDeath(LivingDeathEvent event)
     {
-        if(!event.getEntityLiving().getEntityWorld().isRemote && event.getSource().getTrueSource() instanceof EntityPlayerMP && event.getEntityLiving() != event.getSource().getTrueSource()) // player killed something, server side
+        if(!event.getEntityLiving().getEntityWorld().isRemote && event.getSource().getTrueSource() instanceof ServerPlayerEntity && event.getEntityLiving() != event.getSource().getTrueSource()) // player killed something, server side
         {
-            EntityPlayerMP player = (EntityPlayerMP)event.getSource().getTrueSource();
+            ServerPlayerEntity player = (ServerPlayerEntity)event.getSource().getTrueSource();
 
-            EntityLivingBase living = event.getEntityLiving();
+            LivingEntity living = event.getEntityLiving();
 
             if(GuiltTrip.eventHandlerServer.addPlayerKill(player, living))
             {
-                GuiltTrip.eventHandlerServer.updatePlayersOnKill(player.getName(), null);
+                GuiltTrip.eventHandlerServer.updatePlayersOnKill(player.getName().getUnformattedComponentText(), null);
             }
         }
     }
@@ -64,50 +72,41 @@ public class EventHandlerServer
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-        NBTTagCompound tag = EntityHelper.getPlayerPersistentData(event.player, "GuiltTripSave");
-        int size = tag.getInteger("size");
+        CompoundNBT tag = EntityHelper.getPlayerPersistentData(event.getPlayer(), "GuiltTripSave");
+        int size = tag.getInt("size");
         for(int i = 0; i < size; i++)
         {
-            ArrayList<KillInfo> kills = GuiltTrip.eventHandlerServer.playerKills.get(event.player.getName());
-            if(kills == null)
-            {
-                kills = new ArrayList<>();
-                GuiltTrip.eventHandlerServer.playerKills.put(event.player.getName(), kills);
-            }
-
-            kills.add(KillInfo.createKillInfoFromTag(tag.getCompoundTag("kill_" + i)));
+            ArrayList<KillInfo> kills = GuiltTrip.eventHandlerServer.playerKills.computeIfAbsent(event.getPlayer().getName().getUnformattedComponentText(), k -> new ArrayList<>());
+            kills.add(KillInfo.createKillInfoFromTag(tag.getCompound("kill_" + i)));
         }
-        GuiltTrip.eventHandlerServer.updatePlayersOnKill(event.player.getName(), null);
-        GuiltTrip.eventHandlerServer.updatePlayersOnKill(null, event.player.getName());
+        GuiltTrip.eventHandlerServer.updatePlayersOnKill(event.getPlayer().getName().getUnformattedComponentText(), null);
+        GuiltTrip.eventHandlerServer.updatePlayersOnKill(null, event.getPlayer().getName().getUnformattedComponentText());
     }
 
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        GuiltTrip.eventHandlerServer.playerKills.remove(event.player.getName());
+        GuiltTrip.eventHandlerServer.playerKills.remove(event.getPlayer().getName().getUnformattedComponentText());
     }
 
-    public boolean addPlayerKill(EntityPlayer player, EntityLivingBase killed)//returns true if the kill was added
+    public boolean addPlayerKill(PlayerEntity player, LivingEntity killed)//returns true if the kill was added
     {
-        if(GuiltTrip.config.allKills != 1)
+        if(!GuiltTrip.configCommon.allKills)
         {
-            if(killed instanceof EntityPlayer && GuiltTrip.config.playerKills != 1 || killed instanceof EntityAgeable && !(killed instanceof IMob) && GuiltTrip.config.animalKills != 1 || killed instanceof EntityCreature && !(killed instanceof EntityAgeable && !(killed instanceof IMob)) && GuiltTrip.config.mobKills != 1)
+            if(killed instanceof PlayerEntity && !GuiltTrip.configCommon.playerKills
+                    || killed instanceof AgeableEntity && !(killed instanceof IMob) && !GuiltTrip.configCommon.animalKills
+                    || killed instanceof CreatureEntity && !(killed instanceof AgeableEntity && !(killed instanceof IMob)) && !GuiltTrip.configCommon.mobKills)
             {
                 return false;
             }
         }
-        ArrayList<KillInfo> kills = playerKills.get(player.getName());
-        if(kills == null)
-        {
-            kills = new ArrayList<>();
-            playerKills.put(player.getName(), kills);
-        }
+        ArrayList<KillInfo> kills = playerKills.computeIfAbsent(player.getName().getUnformattedComponentText(), k -> new ArrayList<>());
         KillInfo info = KillInfo.createKillInfoFromEntity(killed);
         if(info != null)
         {
-            if(killed instanceof EntityAgeable && !(killed instanceof IMob))
+            if(killed instanceof AgeableEntity && !(killed instanceof IMob))
             {
-                float mag = GuiltTrip.config.animalGuiltMultiplier;
+                float mag = (float)GuiltTrip.configCommon.animalGuiltMultiplier;
                 if(killed.hasCustomName())
                 {
                     mag *= 1.5F;
@@ -118,21 +117,21 @@ public class EventHandlerServer
                 }
                 info.maxAge = (int)((float)info.maxAge * mag);
             }
-            if(killed instanceof EntityPlayer && GuiltTrip.config.playerKillsLasting == 1)
+            if(killed instanceof PlayerEntity && GuiltTrip.configCommon.playerKillsLasting)
             {
                 info.maxAge = 0;
             }
             kills.add(info);
-            while(kills.size() > GuiltTrip.config.maxGhosts)
+            while(kills.size() > GuiltTrip.configCommon.maxGhosts)
             {
                 kills.remove(0);
             }
 
-            NBTTagCompound tag = EntityHelper.getPlayerPersistentData(player, "GuiltTripSave");
-            tag.setInteger("size", kills.size());
+            CompoundNBT tag = EntityHelper.getPlayerPersistentData(player, "GuiltTripSave");
+            tag.putInt("size", kills.size());
             for(int i = 0; i < kills.size(); i++)
             {
-                tag.setTag("kill_" + i, kills.get(i).getTag());
+                tag.put("kill_" + i, kills.get(i).getTag());
             }
             return true;
         }
@@ -159,7 +158,7 @@ public class EventHandlerServer
         {
             for(Map.Entry<String, ArrayList<KillInfo>> e : playerKills.entrySet())
             {
-                if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(e.getKey()) != null)
+                if(ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUsername(e.getKey()) != null)
                 {
                     killsToSend.add(new PacketKills(e.getKey(), e.getValue()));
                 }
@@ -169,7 +168,7 @@ public class EventHandlerServer
         {
             if(direct != null)
             {
-                EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(direct);
+                ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUsername(direct);
                 if(player != null)
                 {
                     GuiltTrip.channel.sendTo(kills, player);
@@ -177,7 +176,7 @@ public class EventHandlerServer
             }
             else
             {
-                GuiltTrip.channel.sendToAll(kills);
+                GuiltTrip.channel.sendTo(kills, PacketDistributor.ALL.noArg());
             }
         }
     }
