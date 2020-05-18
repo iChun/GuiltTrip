@@ -133,7 +133,6 @@ public class KillInfo
     @OnlyIn(Dist.CLIENT)
     public void forceRender(float partialTick, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
     {
-
         if(Minecraft.getInstance().getRenderViewEntity() != null) //in world?
         {
             try
