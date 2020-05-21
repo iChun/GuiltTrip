@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 public class ConfigCommon extends ConfigBase
 {
-    @CategoryDivider(name = "general")
+    @CategoryDivider(name = "gameplay")
     @Prop(min = 1)
     public int maxGhosts = 20;
 

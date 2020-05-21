@@ -26,11 +26,11 @@ public class GuiltTrip //TODO add iChunUtil dependency
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static ConfigClient configClient;
     public static ConfigCommon configCommon;
+    public static ConfigClient configClient;
 
-    public static EventHandlerClient eventHandlerClient;
     public static EventHandlerServer eventHandlerServer;
+    public static EventHandlerClient eventHandlerClient;
 
     public static PacketChannel channel;
 
