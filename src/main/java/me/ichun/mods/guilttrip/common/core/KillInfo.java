@@ -2,7 +2,7 @@ package me.ichun.mods.guilttrip.common.core;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.guilttrip.common.GuiltTrip;
-import me.ichun.mods.ichunutil.common.entity.EntityHelper;
+import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.util.EventCalendar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.RemoteClientPlayerEntity;

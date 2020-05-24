@@ -2,7 +2,7 @@ package me.ichun.mods.guilttrip.common.core;
 
 import me.ichun.mods.guilttrip.common.GuiltTrip;
 import me.ichun.mods.guilttrip.common.packet.PacketKills;
-import me.ichun.mods.ichunutil.common.entity.EntityHelper;
+import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
